@@ -1,0 +1,211 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: url(/static/images/background.jpg) no-repeat fixed;
+    min-width: 1300px;
+    min-width: 1300px;
+}
+
+h1 {
+    color: black;
+    text-align: left;
+    font-size: 40px;
+}
+
+p {
+    font-family: "Times New Roman";
+    font-size: 70px;
+}
+
+img.logo {
+    border-radius: 25px;
+    margin: 0px auto;
+    display: block;
+}
+
+img.avatar {
+    width: 60px;
+    height: 60px;
+}
+
+img.avatarSelf {
+    width: 100px;
+    height: 100px;
+    border: 4px solid red;
+}
+
+img.avatarEnemy {
+    width: 60px;
+    height: 60px;
+}
+
+img.badgeChallenger {
+    width: 80px;
+    height: 60px;
+}
+
+img.badgeDiamond {
+    width: 85px;
+    height: 70px;
+}
+
+img.watchButton {
+    width: 120px;
+    height: 40px;
+}
+
+img.searchButton {
+    width: 85px;
+    height: 85px;
+}
+
+/* Start - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
+input {
+    padding: 0;
+    margin: 0;
+    vertical-align: bottom;
+    position: relative;
+    top: -3px;
+    left: -4px;
+    *overflow: hidden;
+}
+
+/* End - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
+table {
+    border: 4px solid black;
+    margin-left: 35px;
+    min-width: 1300px;
+    max-width: 1300px;
+}
+
+table {
+    border-collapse: collapse;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    width: 80%;
+}
+
+tr:nth-child(0) {
+    background-color: pink;
+}
+
+tr:not(:first-child):hover {
+    background-color: lightgreen;
+}
+
+tr:nth-child(1) {
+    background-color: #A8A8A8;
+}
+
+tr:nth-child(2n + 3) {
+    background-color: antiquewhite;
+}
+
+tr:nth-child(even) {
+    background-color: lightblue;
+}
+
+th {
+    background-color: yellow;
+    color: saddlebrown;
+    font-size: 25px;
+    padding: 12px;
+    border-right: 2px solid black;
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+}
+
+td.paginationHeader {
+    text-align: center;
+}
+
+td.checkBox {
+    text-align: left;
+    padding-left: 15px;
+}
+
+td {
+    color: black;
+    font-size: 18px;
+    font-weight: bolder;
+    text-align: center;
+    text-transform: capitalize;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 2px solid black;
+}
+
+/* Date */
+td:nth-child(1) {
+    width: 12%;
+}
+
+/* Streamer */
+td:nth-child(2) {
+    width: 8%;
+}
+
+/* Role */
+td:nth-child(3) {
+    width: 8%;
+}
+
+/* Matchup, split into 2 cols */
+td:nth-child(4) {
+    width: 30%;
+}
+
+td:nth-child(5) {
+    width: 30%;
+}
+
+/* Elo */
+td:nth-child(6) {
+    width: 8%;
+}
+
+/* Length */
+td:nth-child(7) {
+    width: 4%;
+}
+
+/* Views */
+td:nth-child(8) {
+    width: 10%;
+}
+
+/* Rating */
+td:nth-child(9) {
+    width: 10%;
+}
+
+/* Watch Now */
+td:nth-child(10) {
+    width: 10%;
+}
+
+#curPage {
+    font-size: 30px;
+}
+
+a.page:link {
+    color: #ff0000;
+}
+
+a.page:visited {
+    color: #0000ff;
+}
+
+a.page:hover {
+    color: green;
+}
