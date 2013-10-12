@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 /**
  * @author mxia (mxia@lolRiver.com)
  *         10/9/13
@@ -39,6 +40,11 @@ public class HomeController {
         return list;
     }
 
+    private String getRandomSkinFile() {
+        Random random = new Random();
+        return skinFileNames.get(random.nextInt(skinFileNames.size()));
+    }
+
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getClips(ModelMap modelMap,
                            @RequestParam(value = "p", defaultValue = "1") int offset,
@@ -52,6 +58,7 @@ public class HomeController {
         int numClipPages = 45;//1 + clipDao.getNumTotalClips() / Constants.MAX_CLIPS_PER_TABLE;
         modelMap.addAttribute("numClipPages", numClipPages);
 
+        modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
         return "index";
     }
 
@@ -59,6 +66,8 @@ public class HomeController {
     public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip) {
         List<Clip> clips = clipDao.getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, "start_time", false, clip);
         modelMap.addAttribute("clips", clips);
+
+        modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
         return "index";
     }
 

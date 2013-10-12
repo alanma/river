@@ -25,6 +25,7 @@ Features
     - Searchiing possible just by clicking champion
     - Watch Video needs to go to game page
     - page numbers should never move, so it's easy to scroll through pages over and over
+    - clicking on random skin takes you to that random game
 
 Bugs
     - zooming in and out of browser (ctrl scroll or ctrl +) messes up page

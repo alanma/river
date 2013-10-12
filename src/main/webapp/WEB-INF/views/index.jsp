@@ -30,7 +30,7 @@
 <form method="POST" action="/searchClips" autocomplete="on">
     <table>
         <tr>
-            <td class="randomSkin"><img class="randomSkin" src="/static/images/skins/skin_akali1.jpg"</td>
+            <td class="randomSkin"><img class="randomSkin" src=${randomSkinFile}></td>
             <td>Streamer<br>
                 <input type="text" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
             </td>
@@ -50,7 +50,7 @@
                 <input type="checkbox" name="eloCriteria" value="SILVER">Silver<br>
                 <input type="checkbox" name="eloCriteria" value="BRONZE">Bronze<br></td>
             <td>Min Length<br>
-                <input class="clipLength" type="number" name="minLength" value=${fn:escapeXml(param.minLength)}><br>
+                <input class="clipLength" type="number" name="minLength" value=${fn:escapeXml(param.minLength)}><br><br>
                 Max Length<br>
                 <input class="clipLength" type="number" name="maxLength" value=${fn:escapeXml(param.maxLength)}><br>
             </td>
