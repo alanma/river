@@ -6,8 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c"
-           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -25,27 +24,25 @@
 
 <body>
 <h1>
-    <img class="logo" src="/static/images/logo.png">
+    <a href="/"><img class="logo" src="/static/images/logo.png"></a>
 </h1>
-<%
 
-%>
-
-<form method="POST" action="searchClips" autocomplete="on">
+<form method="POST" action="/searchClips" autocomplete="on">
     <table>
         <tr>
-            <td></td>
+            <td class="randomSkin"><img class="randomSkin" src="/static/images/skins/skin_akali1.jpg"</td>
             <td>Streamer<br>
-                <input type="text" name="streamer"></td>
+                <input type="text" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+            </td>
             <td class="checkBox"><input type="checkbox" name="roleCriteria" value="TOP">Top<br>
                 <input type="checkbox" name="roleCriteria" value="MID" checked>Mid<br>
                 <input type="checkbox" name="roleCriteria" value="JUNG">Jung<br>
                 <input type="checkbox" name="roleCriteria" value="ADC" checked>ADC<br>
                 <input type="checkbox" name="roleCriteria" value="SUPP">Supp<br></td>
             <td>Champion Played<br>
-                <input type="text" name="championPlayed"></td>
+                <input type="text" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}></td>
             <td>Champion Faced<br>
-                <input type="text" name="championFaced"></td>
+                <input type="text" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}></td>
             <td class="checkBox"><input type="checkbox" name="eloCriteria" value="CHALLENGER">Challenger<br>
                 <input type="checkbox" name="eloCriteria" value="DIAMOND" checked>Diamond<br>
                 <input type="checkbox" name="eloCriteria" value="PLATINUM">Platinum<br>
@@ -53,10 +50,12 @@
                 <input type="checkbox" name="eloCriteria" value="SILVER">Silver<br>
                 <input type="checkbox" name="eloCriteria" value="BRONZE">Bronze<br></td>
             <td>Min Length<br>
-                <input type="text" name="minLength"><br>
+                <input class="clipLength" type="number" name="minLength" value=${fn:escapeXml(param.minLength)}><br>
                 Max Length<br>
-                <input type="text" name="maxLength"><br></td>
-            <td><img class="searchButton" src="/static/images/buttons/button_search.png"></td>
+                <input class="clipLength" type="number" name="maxLength" value=${fn:escapeXml(param.maxLength)}><br>
+            </td>
+            <td><input class="searchButton" type="image" src="/static/images/buttons/button_search.png"
+                       alt="Search Clips"></td>
             <c:set var="prevPage1" value="${param.p - 3}"></c:set>
             <c:set var="prevPage2" value="${param.p - 2}"></c:set>
             <c:set var="prevPage3" value="${param.p - 1}"></c:set>
@@ -150,8 +149,8 @@
                 </td>
                 <td><img class="badgeChallenger"
                          src="static/images/badge/badge3_challenger.png"></td>
-                <td><${clip.length}</td>
-                <td>${clip.views}</td>
+                <td><fmt:formatNumber value="${clip.length / 60}" maxFractionDigits="0"/> min</td>
+                <td><fmt:formatNumber value="${clip.views}"/></td>
                 <td>9.5</td>
                 <td><a href="${clip.url}"><img class="watchButton"
                                                src="static/images/buttons/button_watchVideo.png"/></a></td>
@@ -159,6 +158,7 @@
         </c:forEach>
 
     </table>
+</form>
 </body>
 
 </html>

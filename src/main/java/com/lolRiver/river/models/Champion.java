@@ -49,6 +49,7 @@ public class Champion {
         JARVANIV,
         JAX,
         JAYCE,
+        JINX,
         KARMA,
         KARTHUS,
         KASSADIN,

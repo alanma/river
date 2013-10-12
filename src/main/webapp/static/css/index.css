@@ -32,20 +32,25 @@ img.logo {
     display: block;
 }
 
+img.randomSkin {
+    width: 77px;
+    height: 140px;
+}
+
 img.avatar {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 img.avatarSelf {
-    width: 100px;
-    height: 100px;
+    width: 75px;
+    height: 75px;
     border: 4px solid red;
 }
 
 img.avatarEnemy {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
 }
 
 img.badgeChallenger {
@@ -63,11 +68,6 @@ img.watchButton {
     height: 40px;
 }
 
-img.searchButton {
-    width: 85px;
-    height: 85px;
-}
-
 /* Start - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
 input {
     padding: 0;
@@ -79,6 +79,17 @@ input {
     *overflow: hidden;
 }
 
+input.searchButton {
+    top: 2.5px;
+    left: 2px;
+    width: 85px;
+    height: 85px;
+}
+
+input.clipLength {
+    width: 35px;
+}
+
 /* End - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
 table {
     border: 4px solid black;
@@ -88,13 +99,9 @@ table {
 }
 
 table {
+    table-layout: fixed;
     border-collapse: collapse;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
-    width: 80%;
-}
-
-tr:nth-child(0) {
-    background-color: pink;
 }
 
 tr:not(:first-child):hover {
@@ -121,6 +128,11 @@ th {
     border-right: 2px solid black;
     border-top: 4px solid black;
     border-bottom: 4px solid black;
+    overflow: hidden;
+}
+
+td.randomSkin {
+    background-color: black;
 }
 
 td.paginationHeader {
@@ -143,40 +155,41 @@ td {
     padding-top: 2px;
     padding-bottom: 2px;
     border: 2px solid black;
+    overflow: hidden;
 }
 
 /* Date */
 td:nth-child(1) {
-    width: 12%;
+    width: 10%;
 }
 
 /* Streamer */
 td:nth-child(2) {
-    width: 8%;
+    width: 10%;
 }
 
 /* Role */
 td:nth-child(3) {
-    width: 8%;
+    width: 10%;
 }
 
 /* Matchup, split into 2 cols */
 td:nth-child(4) {
-    width: 30%;
+    width: 20%;
 }
 
 td:nth-child(5) {
-    width: 30%;
+    width: 20%;
 }
 
-/* Elo */
+/* Tier */
 td:nth-child(6) {
-    width: 8%;
+    width: 11%;
 }
 
 /* Length */
 td:nth-child(7) {
-    width: 4%;
+    width: 15%;
 }
 
 /* Views */
@@ -184,13 +197,8 @@ td:nth-child(8) {
     width: 10%;
 }
 
-/* Rating */
+/* Rating & Watch Now */
 td:nth-child(9) {
-    width: 10%;
-}
-
-/* Watch Now */
-td:nth-child(10) {
     width: 10%;
 }
 

@@ -6,11 +6,13 @@ import com.lolRiver.river.persistence.interfaces.ClipDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author mxia (mxia@lolRiver.com)
@@ -18,12 +20,26 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping("/")
 public class HomeController {
     @Autowired
     ClipDao clipDao;
 
-    @RequestMapping(method = RequestMethod.GET)
+    private List<String> skinFileNames = new ArrayList<String>(getSkinFileNames());
+
+    private List<String> getSkinFileNames() {
+        List<String> list = new ArrayList<String>();
+
+        File folder = new File("src/main/webapp/static/images/skins");
+        if (folder.exists()) {
+            for (File fileEntry : folder.listFiles()) {
+                String filePath = fileEntry.getAbsolutePath();
+                list.add(filePath.substring(filePath.indexOf("/static")));
+            }
+        }
+        return list;
+    }
+
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getClips(ModelMap modelMap,
                            @RequestParam(value = "p", defaultValue = "1") int offset,
                            @RequestParam(value = "orderBy", defaultValue = "start_time") String orderBy,
@@ -40,9 +56,13 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/searchClips"}, method = RequestMethod.POST)
-    public String searchClips(@RequestBody Clip clip) {
-        System.out.println(clip);
+    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip) {
+        List<Clip> clips = clipDao.getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, "start_time", false, clip);
+        modelMap.addAttribute("clips", clips);
         return "index";
     }
 
+    public void dummyMethodForTesting() {
+        return;
+    }
 }

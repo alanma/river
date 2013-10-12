@@ -41,12 +41,18 @@ public class Clip {
     private Champion enemyLanePartnerChampion;
     private Elo elo;
 
-    // Non DB variables
+    /* START - Non DB variables */
     private String timeSinceNowMessage;     // used for index.jsp
-    private List<Elo> eloCriteria;
-    private List<Role> roleCriteria;
-    private int minLength;
-    private int maxLength;
+
+    // front-end input for searching clips
+    private String championPlayedString;
+    private String championFacedString;
+    private List<String> eloCriteria;
+    private List<String> roleCriteria;
+    private String minLength;
+    private String maxLength;
+
+    /* END - Non DB variables */
 
     public int getId() {
         return id;
@@ -192,38 +198,56 @@ public class Clip {
         return this;
     }
 
-    public List<Elo> getElos() {
-        return eloCriteria;
+    public String getChampionPlayedString() {
+        return championPlayedString;
     }
 
-    public Clip setElos(List<Elo> eloCriteria) {
-        this.eloCriteria = new ArrayList<Elo>(eloCriteria);
+    public Clip setChampionPlayedString(String championPlayedString) {
+        this.championPlayedString = championPlayedString;
         return this;
     }
 
-    public List<Role> getRoles() {
+    public String getChampionFacedString() {
+        return championFacedString;
+    }
+
+    public Clip setChampionFacedString(String championFacedString) {
+        this.championFacedString = championFacedString;
+        return this;
+    }
+
+    public List<String> getRoleCriteria() {
         return roleCriteria;
     }
 
-    public Clip setRoles(List<Role> roleCriteria) {
-        this.roleCriteria = new ArrayList<Role>(roleCriteria);
+    public Clip setRoleCriteria(List<String> roleCriteria) {
+        this.roleCriteria = new ArrayList<String>(roleCriteria);
         return this;
     }
 
-    public int getMinLength() {
+    public List<String> getEloCriteria() {
+        return eloCriteria;
+    }
+
+    public Clip setEloCriteria(List<String> eloCriteria) {
+        this.eloCriteria = new ArrayList<String>(eloCriteria);
+        return this;
+    }
+
+    public String getMinLength() {
         return minLength;
     }
 
-    public Clip setMinLength(int minLength) {
+    public Clip setMinLength(String minLength) {
         this.minLength = minLength;
         return this;
     }
 
-    public int getMaxLength() {
+    public String getMaxLength() {
         return maxLength;
     }
 
-    public Clip setMaxLength(int maxLength) {
+    public Clip setMaxLength(String maxLength) {
         this.maxLength = maxLength;
         return this;
     }
@@ -231,26 +255,26 @@ public class Clip {
     @Override
     public String toString() {
         return "Clip{" +
-                "id=" + id +
-                ", gameId=" + gameId +
-                ", videoId=" + videoId +
-                ", url='" + url + '\'' +
-                ", streamerName='" + streamerName + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", length=" + length +
-                ", views=" + views +
-                ", championPlayed=" + championPlayed +
-                ", rolePlayed=" + rolePlayed +
-                ", championFaced=" + championFaced +
-                ", lanePartnerChampion=" + lanePartnerChampion +
-                ", enemyLanePartnerChampion=" + enemyLanePartnerChampion +
-                ", elo=" + elo +
-                ", timeSinceNowMessage='" + timeSinceNowMessage + '\'' +
-                ", eloCriteria=" + eloCriteria +
-                ", roleCriteria=" + roleCriteria +
-                ", minLength=" + minLength +
-                ", maxLength=" + maxLength +
-                '}';
+               "id=" + id +
+               ", gameId=" + gameId +
+               ", videoId=" + videoId +
+               ", url='" + url + '\'' +
+               ", streamerName='" + streamerName + '\'' +
+               ", startTime=" + startTime +
+               ", endTime=" + endTime +
+               ", length=" + length +
+               ", views=" + views +
+               ", championPlayed=" + championPlayed +
+               ", rolePlayed=" + rolePlayed +
+               ", championFaced=" + championFaced +
+               ", lanePartnerChampion=" + lanePartnerChampion +
+               ", enemyLanePartnerChampion=" + enemyLanePartnerChampion +
+               ", elo=" + elo +
+               ", timeSinceNowMessage='" + timeSinceNowMessage + '\'' +
+               ", eloCriteria=" + eloCriteria +
+               ", roleCriteria=" + roleCriteria +
+               ", minLength=" + minLength +
+               ", maxLength=" + maxLength +
+               '}';
     }
 }

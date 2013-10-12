@@ -6,6 +6,9 @@ import com.lolRiver.river.models.Elo;
 import com.lolRiver.river.models.Role;
 import com.lolRiver.river.persistence.interfaces.ClipDao;
 import com.lolRiver.river.util.DateUtil;
+import com.lolRiver.river.util.StringUtil;
+import com.lolRiver.river.util.sql.SqlQueryUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -77,12 +80,95 @@ public class JdbcClipDao implements ClipDao {
     public List<Clip> getClips(int offset, int size, String orderBy, boolean descending) {
         String query;
         if (descending) {
-            query = GET_CLIPS_HEAD_SQL + " ORDER BY " + orderBy + " DESC LIMIT ?,?";
+            query = String.format(GET_CLIPS_HEAD_SQL + " ORDER BY %s DESC LIMIT %d, %d", orderBy, offset,
+                                 size);
         } else {
-            query = GET_CLIPS_HEAD_SQL + " ORDER BY " + orderBy + " ASC LIMIT ?,?";
+            query = String.format(GET_CLIPS_HEAD_SQL + " ORDER BY %s ASC LIMIT %d, %d", orderBy, offset,
+                                 size);
         }
-        final Object[] params = new Object[]{offset, size};
-        return jdbcTemplate.query(query, params, rowMapper);
+        LOGGER.debug("QUERYING DEFAULT CLIPS FROM FRONT-END QUERY: " + query);
+        return jdbcTemplate.query(query, rowMapper);
+    }
+
+    @Override
+    public List<Clip> getClipsFromClip(int offset, int size, String orderBy, boolean descending, Clip clip) {
+        String query = GET_CLIPS_HEAD_SQL;
+
+        StringBuilder sb = new StringBuilder(" WHERE ");
+        boolean isFirstCondition = true;
+        if (!StringUtils.isBlank(clip.getStreamerName())) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.STREAMER_NAME_STRING + " = " +
+                      StringUtil.addSurroundingQuotes(clip.getStreamerName().toLowerCase()));
+        }
+        if (!StringUtils.isBlank(clip.getChampionPlayedString())) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.CHAMPION_PLAYED_STRING + " = " +
+                      StringUtil.addSurroundingQuotes(clip.getChampionPlayedString()));
+        }
+        if (!StringUtils.isBlank(clip.getChampionFacedString())) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.CHAMPION_FACED_STRING + " = " +
+                      StringUtil.addSurroundingQuotes(clip.getChampionFacedString()));
+        }
+        if (!StringUtils.isBlank(clip.getMinLength())) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.LENGTH_STRING + " >= " + clip.getMinLength());
+        }
+        if (!StringUtils.isBlank(clip.getMaxLength())) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.LENGTH_STRING + " <= " + clip.getMaxLength());
+        }
+        List<String> roleCriteria = clip.getRoleCriteria();
+        if (roleCriteria != null && roleCriteria.size() > 0) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.ROLE_PLAYED_STRING + " IN " + SqlQueryUtil.inClause(roleCriteria, true));
+        }
+        List<String> eloCriteria = clip.getEloCriteria();
+        if (eloCriteria != null && eloCriteria.size() > 0) {
+            if (isFirstCondition) {
+                isFirstCondition = false;
+            } else {
+                sb.append(" AND ");
+            }
+            sb.append(Clip.ELO_STRING + " IN " + SqlQueryUtil.inClause(eloCriteria, true));
+        }
+        String conditionQuery = sb.toString();
+        conditionQuery = conditionQuery.equals(" WHERE ") ? "" : conditionQuery;
+        query += conditionQuery;
+
+        if (descending) {
+            query += String.format(" ORDER BY %s DESC LIMIT %d, %d", orderBy, offset, size);
+        } else {
+            query += String.format(" ORDER BY %s ASC LIMIT %d, %d", orderBy, offset, size);
+        }
+
+        LOGGER.debug("QUERYING CLIPS FROM FRONT-END QUERY: " + query);
+        return jdbcTemplate.query(query, rowMapper);
     }
 
     @Override

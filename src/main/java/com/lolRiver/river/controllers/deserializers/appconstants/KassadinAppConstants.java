@@ -59,6 +59,7 @@ public class KassadinAppConstants {
         map.put("59", Champion.Name.JARVANIV);
         map.put("24", Champion.Name.JAX);
         map.put("126", Champion.Name.JAYCE);
+        map.put("222", Champion.Name.JINX);
         map.put("43", Champion.Name.KARMA);
         map.put("30", Champion.Name.KARTHUS);
         map.put("38", Champion.Name.KASSADIN);

@@ -1,4 +1,7 @@
 all:
+  download:
+    skins_file: com/lolRiver/river/util/skins.yml
+
   riot:
     client_version: 3.12.13_10_03_21_10
     bots_file: com/lolRiver/achimala/leaguelib/tests/bots.yml

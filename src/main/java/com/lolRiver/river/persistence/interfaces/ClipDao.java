@@ -19,6 +19,10 @@ public interface ClipDao {
     // get size clips from offset, ordered by orderBy
     public List<Clip> getClips(final int offset, final int size, String orderBy, boolean descending);
 
+    // get clips based on conditions in clip
+    public List<Clip> getClipsFromClip(final int offset, final int size, String orderBy, boolean descending,
+                                       Clip clip);
+
     // create an Clip. Returns created Clip, or null if not possible
     public Clip insertClip(Clip clip);
 }
