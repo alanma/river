@@ -212,27 +212,27 @@
             <td>${clip.streamerName}</td>
             <td>${fn:toLowerCase(clip.rolePlayed.name)}</td>
             <td colspan="2">
-                <c:set var="championPlayedName" value="${fn:toLowerCase(clip.championPlayed.name)}"/>
                 <img class="avatarSelf"
-                     src="static/images/avatars/avatar_${championPlayedName}.png">
+                     src="static/images/avatars/avatar_${fn:toLowerCase(clip.championPlayed.name)}.png">
 
                 <c:set var="lanePartnerChampionName" value="${fn:toLowerCase(clip.lanePartnerChampion.name)}"/>
-                <c:if test="${not empty lanePartnerChampionName}">
-                    <img class="avatar"
-                         src="static/images/avatars/avatar_${lanePartnerChampionName}.png">
+                <c:if test="${empty lanePartnerChampionName}">
+                    <c:set var="lanePartnerChampionName" value="blank"></c:set>
                 </c:if>
+                <img class="avatar" src="static/images/avatars/avatar_${lanePartnerChampionName}.png">
 
-                vs
+                VS
 
-                <c:set var="championFacedName" value="${fn:toLowerCase(clip.championFaced.name)}"/>
-                <img class="avatarEnemy" src="static/images/avatars/avatar_${championFacedName}.png">
+                <img class="avatarEnemy"
+                     src="static/images/avatars/avatar_${fn:toLowerCase(clip.championFaced.name)}.png">
 
                 <c:set var="enemyLanePartnerChampionName"
                        value="${fn:toLowerCase(clip.enemyLanePartnerChampion.name)}"/>
-                <c:if test="${not empty enemyLanePartnerChampionName}">
-                    <img class="avatar"
-                         src="static/images/avatars/avatar_${enemyLanePartnerChampionName}.png">
+                <c:if test="${empty enemyLanePartnerChampionName}">
+                    <c:set var="enemyLanePartnerChampionName" value="blank"></c:set>
                 </c:if>
+                <img class="avatar"
+                     src="static/images/avatars/avatar_${enemyLanePartnerChampionName}.png">
             </td>
             <td><img class="badgeChallenger"
                      src="static/images/badge/badge3_challenger.png"></td>

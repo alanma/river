@@ -83,6 +83,7 @@ input {
 }
 
 input.searchButton {
+    padding-top: 22px;
     vertical-align: text-top;
     width: 85px;
     height: 85px;
@@ -91,7 +92,7 @@ input.searchButton {
 input.backButton {
     vertical-align: text-top;
     left: 0px;
-    top: -15px;
+    top: -10px;
     width: 75px;
     height: 75px;
     border-radius: 7px;
