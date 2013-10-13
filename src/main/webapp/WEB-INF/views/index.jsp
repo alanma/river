@@ -50,18 +50,74 @@
             <br>Max Length<br>
             <input class="clipLength" type="number" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
         </td>
-        <td class="searchRole checkBox"><input type="checkbox" name="roleCriteria" value="TOP">Top<br>
-            <input type="checkbox" name="roleCriteria" value="MID" checked>Mid<br>
-            <input type="checkbox" name="roleCriteria" value="JUNG">Jung<br>
-            <input type="checkbox" name="roleCriteria" value="ADC" checked>ADC<br>
-            <input type="checkbox" name="roleCriteria" value="SUPP">Supp<br></td>
-        <td class="searchTier checkBox"><input type="checkbox" name="eloCriteria"
-                                               value="CHALLENGER">Challenger<br>
-            <input type="checkbox" name="eloCriteria" value="DIAMOND" checked>Diamond<br>
-            <input type="checkbox" name="eloCriteria" value="PLATINUM">Platinum<br>
-            <input type="checkbox" name="eloCriteria" value="GOLD" checked>Gold<br>
-            <input type="checkbox" name="eloCriteria" value="SILVER">Silver<br>
-            <input type="checkbox" name="eloCriteria" value="BRONZE">Bronze<br></td>
+        <td class="searchRole checkBox">
+            <c:set var="topChecked" value=""/>
+            <c:set var="midChecked" value=""/>
+            <c:set var="jungChecked" value=""/>
+            <c:set var="adcChecked" value=""/>
+            <c:set var="suppChecked" value=""/>
+
+            <c:forEach items="${roleCriteria}" var="role">
+                <c:choose>
+                    <c:when test="${role eq '\"TOP\"'}">
+                        <c:set var="topChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${role eq '\"MID\"'}">
+                        <c:set var="midChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${role eq '\"JUNG\"'}">
+                        <c:set var="jungChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${role eq '\"ADC\"'}">
+                        <c:set var="adcChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${role eq '\"SUPP\"'}">
+                        <c:set var="suppChecked" value="checked"/>
+                    </c:when>
+                </c:choose>
+            </c:forEach>
+
+            <input type="checkbox" name="roleCriteria" value="TOP" ${topChecked}>Top<br>
+            <input type="checkbox" name="roleCriteria" value="MID" ${midChecked}>Mid<br>
+            <input type="checkbox" name="roleCriteria" value="JUNG" ${jungChecked}>Jung<br>
+            <input type="checkbox" name="roleCriteria" value="ADC" ${adcChecked}>ADC<br>
+            <input type="checkbox" name="roleCriteria" value="SUPP" ${suppChecked}>Supp<br></td>
+        <td class="searchTier checkBox">
+            <c:set var="challengerChecked" value=""/>
+            <c:set var="diamondChecked" value=""/>
+            <c:set var="platinumChecked" value=""/>
+            <c:set var="goldChecked" value=""/>
+            <c:set var="silverChecked" value=""/>
+            <c:set var="bronzeChecked" value=""/>
+
+            <c:forEach items="${eloCriteria}" var="elo">
+                <c:choose>
+                    <c:when test="${elo eq 'CHALLENGER'}">
+                        <c:set var="challengerChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${elo eq 'DIAMOND'}">
+                        <c:set var="diamondChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${elo eq 'PLATINUM'}">
+                        <c:set var="platinumChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${elo eq 'GOLD'}">
+                        <c:set var="goldChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${elo eq 'SILVER'}">
+                        <c:set var="silverChecked" value="checked"/>
+                    </c:when>
+                    <c:when test="${elo eq 'BRONZE'}">
+                        <c:set var="bronzeChecked" value="checked"/>
+                    </c:when>
+                </c:choose>
+            </c:forEach>
+            <input type="checkbox" name="eloCriteria" value="CHALLENGER" ${challengerChecked}>Challenger<br>
+            <input type="checkbox" name="eloCriteria" value="DIAMOND" ${diamondChecked}>Diamond<br>
+            <input type="checkbox" name="eloCriteria" value="PLATINUM" ${platinumChecked}>Platinum<br>
+            <input type="checkbox" name="eloCriteria" value="GOLD" ${goldChecked}>Gold<br>
+            <input type="checkbox" name="eloCriteria" value="SILVER" ${silverChecked}>Silver<br>
+            <input type="checkbox" name="eloCriteria" value="BRONZE" ${bronzeChecked}>Bronze<br></td>
 
         <td class="search"><input class="searchButton" type="image"
                                   src="/static/images/buttons/button_search.png"

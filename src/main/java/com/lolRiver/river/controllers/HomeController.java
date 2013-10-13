@@ -79,6 +79,20 @@ public class HomeController {
         session.setAttribute("prevMinLength", prevMinLength);
         session.setAttribute("prevMaxLength", prevMaxLength);
 
+        // pass back in the posted checkboxes to leave them checked
+        if (clip != null) {
+            List<String> roleCriteria = new ArrayList<String>();
+            List<String> eloCriteria = new ArrayList<String>();
+            if (clip.getRoleCriteria() != null) {
+                roleCriteria = clip.getRoleCriteria();
+            }
+            if (clip.getEloCriteria() != null) {
+                eloCriteria = clip.getEloCriteria();
+            }
+            modelMap.addAttribute("roleCriteria", new ArrayList<String>(roleCriteria));
+            modelMap.addAttribute("eloCriteria", new ArrayList<String>(eloCriteria));
+        }
+
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
         return "index";
     }

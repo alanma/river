@@ -24,6 +24,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 /**
  * @author mxia (mxia@lolRiver.com)
@@ -155,7 +156,17 @@ public class JdbcClipDao implements ClipDao {
             } else {
                 sb.append(" AND ");
             }
-            sb.append(Clip.ELO_STRING + " IN " + SqlQueryUtil.inClause(eloCriteria, true));
+            List<String> dbSpecificEloCriteria = new ArrayList<String>();
+            for (String s : eloCriteria) {
+                if (s.equals("CHALLENGER")) {
+                    dbSpecificEloCriteria.add(s);
+                } else {
+                    for (int i = 1; i <= 5; i++) {
+                        dbSpecificEloCriteria.add(s + i);
+                    }
+                }
+            }
+            sb.append(Clip.ELO_STRING + " IN " + SqlQueryUtil.inClause(dbSpecificEloCriteria, true));
         }
         String conditionQuery = sb.toString();
         conditionQuery = conditionQuery.equals(" WHERE ") ? "" : conditionQuery;
