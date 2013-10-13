@@ -27,14 +27,17 @@ p {
 }
 
 img.logo {
+    float: left;
     border-radius: 25px;
-    margin: 0px auto;
+    margin-left: 160px;
+    margin-right: 115px;
+    margin-top: 60px;
     display: block;
 }
 
 img.randomSkin {
-    width: 82.5px;
-    height: 150px;
+    width: 121px;
+    height: 220px;
 }
 
 img.avatar {
@@ -80,10 +83,18 @@ input {
 }
 
 input.searchButton {
-    top: 2.5px;
-    left: 2px;
+    vertical-align: text-top;
     width: 85px;
     height: 85px;
+}
+
+input.backButton {
+    vertical-align: text-top;
+    left: 0px;
+    top: -15px;
+    width: 75px;
+    height: 75px;
+    border-radius: 7px;
 }
 
 input.clipLength {
@@ -91,14 +102,57 @@ input.clipLength {
 }
 
 /* End - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
-table {
+
+/* Start - Search Bar */
+
+table.search {
+    margin-top: 25px;
+    border: 8px groove brown;
+    border-collapse: collapse;
+}
+
+td.randomSkin {
+    background-color: black;
+    margin-top: 50px;
+}
+
+td.search {
+    padding-top: 7px;
+    padding-bottom: 9px;
+    padding-left: 18px;
+    border: none;
+    text-align: left;
+    vertical-align: text-top;
+}
+
+td.searchRole {
+    border: none;
+    text-align: left;
+    vertical-align: text-top;
+}
+
+td.searchTier {
+    border: none;
+    text-align: left;
+    vertical-align: text-top;
+}
+
+td.paginationHeader {
+    text-align: center;
+}
+
+td.checkBox {
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* End - Search Bar */
+
+table.clips {
     border: 4px solid black;
     margin-left: 35px;
     min-width: 1300px;
     max-width: 1300px;
-}
-
-table {
     table-layout: fixed;
     border-collapse: collapse;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -131,19 +185,6 @@ th {
     overflow: hidden;
 }
 
-td.randomSkin {
-    background-color: black;
-}
-
-td.paginationHeader {
-    text-align: center;
-}
-
-td.checkBox {
-    text-align: left;
-    padding-left: 15px;
-}
-
 td {
     color: black;
     font-size: 18px;
@@ -159,46 +200,46 @@ td {
 }
 
 /* Date */
-td:nth-child(1) {
+td.clips:nth-child(1) {
     width: 10%;
 }
 
 /* Streamer */
-td:nth-child(2) {
+td.clips:nth-child(2) {
     width: 10%;
 }
 
 /* Role */
-td:nth-child(3) {
+td.clips:nth-child(3) {
     width: 10%;
 }
 
 /* Matchup, split into 2 cols */
-td:nth-child(4) {
+td.clips:nth-child(4) {
     width: 20%;
 }
 
-td:nth-child(5) {
+td.clips:nth-child(5) {
     width: 20%;
 }
 
 /* Tier */
-td:nth-child(6) {
+td.clips:nth-child(6) {
     width: 11%;
 }
 
 /* Length */
-td:nth-child(7) {
+td.clips:nth-child(7) {
     width: 15%;
 }
 
 /* Views */
-td:nth-child(8) {
+td.clips:nth-child(8) {
     width: 10%;
 }
 
 /* Rating & Watch Now */
-td:nth-child(9) {
+td.clips:nth-child(9) {
     width: 10%;
 }
 

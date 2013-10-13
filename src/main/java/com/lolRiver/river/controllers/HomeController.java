@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +64,20 @@ public class HomeController {
     }
 
     @RequestMapping(value = {"/searchClips"}, method = RequestMethod.POST)
-    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip) {
+    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip, HttpSession session,
+                              @RequestParam(value = "prevStreamerName") String prevStreamerName,
+                              @RequestParam(value = "prevChampionPlayedString") String prevChampionPlayedString,
+                              @RequestParam(value = "prevChampionFacedString") String prevChampionFacedString,
+                              @RequestParam(value = "prevMinLength") String prevMinLength,
+                              @RequestParam(value = "prevMaxLength") String prevMaxLength) {
         List<Clip> clips = clipDao.getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, "start_time", false, clip);
         modelMap.addAttribute("clips", clips);
+
+        session.setAttribute("prevStreamerName", prevStreamerName);
+        session.setAttribute("prevChampionPlayedString", prevChampionPlayedString);
+        session.setAttribute("prevChampionFacedString", prevChampionFacedString);
+        session.setAttribute("prevMinLength", prevMinLength);
+        session.setAttribute("prevMaxLength", prevMaxLength);
 
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
         return "index";
