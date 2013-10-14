@@ -21,6 +21,7 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/index.css"/>
     <link rel="stylesheet" href="/static/css/jquery/ui-lightness/jquery-ui-1.10.3.custom.css"/>
+    <script src="/static/script/util.js"></script>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
@@ -264,42 +265,79 @@
             </c:if></th>
     </tr>
 
-    <c:forEach items="${clips}" var="clip">
+    <c:forEach items="${clips}" var="clip" varStatus="status">
         <tr class="clips">
             <td><fmt:formatDate type="date" value="${clip.startTime}"/></td>
             <td>
-                <form method="POST" id="streamerForm" action="/searchClips">
+                <form method="POST" id="streamerForm${status.index}" action="/searchClips">
                     <input type='hidden' name='streamerName' value="${clip.streamerName}">
-                    <a href="javascript: submitForm('streamerForm')">
+                    <a href="javascript: submitForm('streamerForm${status.index}')">
                             ${clip.streamerName}</a>
                 </form>
             </td>
-            <td>${fn:toLowerCase(clip.rolePlayed.name)}</td>
-            <td colspan="2">
-                <img class="avatarSelf"
-                     src="static/images/avatars/avatar_${fn:toLowerCase(clip.championPlayed.name)}.png">
-
-                <c:set var="lanePartnerChampionName" value="${fn:toLowerCase(clip.lanePartnerChampion.name)}"/>
-                <c:if test="${empty lanePartnerChampionName}">
-                    <c:set var="lanePartnerChampionName" value="blank"></c:set>
-                </c:if>
-                <img class="avatar" src="static/images/avatars/avatar_${lanePartnerChampionName}.png">
-
-                VS
-
-                <img class="avatarEnemy"
-                     src="static/images/avatars/avatar_${fn:toLowerCase(clip.championFaced.name)}.png">
-
-                <c:set var="enemyLanePartnerChampionName"
-                       value="${fn:toLowerCase(clip.enemyLanePartnerChampion.name)}"/>
-                <c:if test="${empty enemyLanePartnerChampionName}">
-                    <c:set var="enemyLanePartnerChampionName" value="blank"></c:set>
-                </c:if>
-                <img class="avatar"
-                     src="static/images/avatars/avatar_${enemyLanePartnerChampionName}.png">
+            <td>
+                <form method="POST" id="roleForm${status.index}" action="/searchClips">
+                    <input type='hidden' name='roleCriteria' value="${clip.rolePlayed.name}">
+                    <a href="javascript: submitForm('roleForm${status.index}')">
+                            ${fn:toLowerCase(clip.rolePlayed.name)}</a>
+                </form>
             </td>
-            <td><img class="badgeChallenger"
-                     src="static/images/badge/badge3_${fn:toLowerCase(clip.generalElo)}.png"></td>
+            <td colspan="2">
+                <form method="POST" id="champFormA${status.index}" action="/searchClips">
+                    <input class="avatarSelf" type='image' name='championPlayedString'
+                           value="${fn:toLowerCase(clip.championPlayed.name)}"
+                           src="static/images/avatars/avatar_${fn:toLowerCase(clip.championPlayed.name)}.png">
+                </form>
+
+                <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
+                <c:choose>
+                    <c:when test="${empty clip.lanePartnerChampion.name}">
+                        <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
+                               escapeXml="false"></c:out>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="lanePartnerChampionName" value="${fn:toLowerCase(clip.lanePartnerChampion.name)}"/>
+                        <c:out value='<form method="POST" id="champFormB${status.index}" action="/searchClips">
+                                      <input class="avatar" type="image" name="championPlayedString" value="${lanePartnerChampionName}"
+                                             src="static/images/avatars/avatar_${lanePartnerChampionName}.png"></form>'
+                               escapeXml="false">
+                        </c:out>
+                    </c:otherwise>
+                </c:choose>
+
+                <img class="vs" src="/static/images/ui/vs.png"/>
+
+                <form method="POST" id="champFormC${status.index}" action="/searchClips">
+                    <input class="avatarEnemy" type='image' name='championPlayedString'
+                           value="${fn:toLowerCase(clip.championFaced.name)}"
+                           src="static/images/avatars/avatar_${fn:toLowerCase(clip.championFaced.name)}.png">
+                </form>
+
+                <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
+                <c:choose>
+                    <c:when test="${empty clip.enemyLanePartnerChampion.name}">
+                        <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
+                               escapeXml="false"></c:out>
+                    </c:when>
+                    <c:otherwise>
+                        <c:set var="enemyLanePartnerChampionName"
+                               value="${fn:toLowerCase(clip.enemyLanePartnerChampion.name)}"/>
+                        <c:out value='<form method="POST" id="champFormD${status.index}" action="/searchClips">
+                                      <input class="avatar" type="image" name="championPlayedString" value="${enemyLanePartnerChampionName}"
+                                             src="static/images/avatars/avatar_${enemyLanePartnerChampionName}.png"></form>'
+                               escapeXml="false">
+                        </c:out>
+                    </c:otherwise>
+                </c:choose>
+
+            </td>
+            <td>
+                <form method="POST" id="champFormC${status.index}" action="/searchClips">
+                    <input class="badgeChallenger" type='image' name='eloCriteria'
+                           value="${clip.generalElo}"
+                           src="static/images/badge/badge3_${fn:toLowerCase(clip.generalElo)}.png">
+                </form>
+            </td>
             <td><fmt:formatNumber value="${clip.length / 60}" maxFractionDigits="0"/> min</td>
             <td><fmt:formatNumber value="${clip.views}"/></td>
             <td>9.5</td>

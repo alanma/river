@@ -15,6 +15,10 @@ body {
     min-width: 1300px;
 }
 
+form {
+    display: inline;
+}
+
 img.logo {
     float: left;
     border-radius: 25px;
@@ -34,18 +38,28 @@ img.avatar {
     height: 50px;
 }
 
-img.avatarSelf {
+input.avatar {
+    width: 50px;
+    height: 50px;
+}
+
+input.avatarSelf {
     width: 75px;
     height: 75px;
     border: 4px solid red;
 }
 
-img.avatarEnemy {
+input.avatarEnemy {
     width: 50px;
     height: 50px;
 }
 
-img.badgeChallenger {
+img.vs {
+    width: 40px;
+    height: 40px;
+}
+
+input.badgeChallenger {
     width: 80px;
     height: 60px;
 }
@@ -70,17 +84,6 @@ img.sortButtonEnabled {
     opacity: 1;
     width: 25px;
     height: 15px;
-}
-
-/* Start - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
-input {
-    padding: 0;
-    margin: 0;
-    vertical-align: bottom;
-    position: relative;
-    top: -3px;
-    left: -4px;
-    *overflow: hidden;
 }
 
 /* Checkboxes - http://csscheckbox.com/
@@ -176,6 +179,10 @@ input[type=checkbox].css-checkbox.lrg:checked + label.css-label.lrg {
 }
 
 /* END checkbox */
+
+input {
+    text-transform: capitalize;
+}
 
 input.searchButton {
     padding-top: 22px;
