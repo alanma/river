@@ -24,3 +24,4 @@ Bugs
     - zooming in and out of browser (ctrl scroll or ctrl +) messes up page
     - reshaping browser causes search inputs like "Streamer Name" to wrap, causing search table to expand vertically
         - (putting white-space:no-wrap fixes problem, but introduces new one where table will wrap)
+    - clip table cells should never change sizes, which happens when you keep clicking sort by

@@ -46,6 +46,8 @@
 <a href="/"><img class="logo" src="/static/images/logo.png"></a>
 
 <form method="POST" action="/searchClips">
+    <input type="hidden" name="orderBy" value="start_time">
+    <input type="hidden" name="desc" value="true">
     <table class="search">
         <tr>
             <td class="randomSkin" rowspan="5"><img class="randomSkin" src=${randomSkinFile}></td>
@@ -204,147 +206,385 @@
 
 <br>
 <table class="clips">
-    <tr>
-        <th>Date <img class="sortButtonEnabled" src="/static/images/ui/buttons/button_sortDown.png"></th>
-        <th>Streamer <img class="sortButtonDisabled" src="/static/images/ui/buttons/button_sortDown.png"></th>
-        <th>Role</th>
-        <th colspan="2">Matchup</th>
-        <th>Tier</th>
-        <th>Length</th>
-        <th>Views</th>
-        <th>Rating</th>
-        <th class="paginationHeader">
-            Page<br>
-            <c:set var="prevPage1" value="${param.p - 3}"></c:set>
-            <c:set var="prevPage2" value="${param.p - 2}"></c:set>
-            <c:set var="prevPage3" value="${param.p - 1}"></c:set>
-            <c:set var="nextPage1" value="${param.p + 1}"></c:set>
-            <c:set var="nextPage2" value="${param.p + 2}"></c:set>
-            <c:set var="nextPage3" value="${param.p + 3}"></c:set>
-            <c:if test="${param.p gt 1}">
-                <a href="?p=${param.p - 1}">&lt;</a>
+<tr>
+<th>Date
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="dateImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="dateImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'start_time'}">
+            <c:if test="${desc == false}">
+                <c:set var="dateImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
             </c:if>
+            <c:set var="dateImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${dateImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${dateImageClass}" type="image" name="orderBy"
+               value="start_time" src="${dateImage}">
+    </form>
+</th>
+<th>Streamer
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="streamerImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="streamerImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'streamer_name'}">
+            <c:if test="${desc == false}">
+                <c:set var="streamerImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="streamerImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${streamerImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${streamerImageClass}" type="image" name="orderBy"
+               value="streamer_name" src="${streamerImage}">
+    </form>
+</th>
+<th>Role
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="roleImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="roleImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'role_played'}">
+            <c:if test="${desc == false}">
+                <c:set var="roleImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="roleImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${roleImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${roleImageClass}" type="image" name="orderBy"
+               value="role_played" src="${roleImage}">
+    </form>
+</th>
+<th colspan="2">Matchup
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="championPlayedImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="championPlayedImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'champion_played'}">
+            <c:if test="${desc == false}">
+                <c:set var="championPlayedImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="championPlayedImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${championPlayedImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${championPlayedImageClass}" type="image" name="orderBy"
+               value="champion_played" src="${championPlayedImage}">
+    </form>
+</th>
+<th>Tier
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="tierImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="tierImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'elo'}">
+            <c:if test="${desc == false}">
+                <c:set var="tierImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="tierImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${tierImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${tierImageClass}" type="image" name="orderBy"
+               value="elo" src="${tierImage}">
+    </form>
+</th>
+<th>Length
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="lengthImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="lengthImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'length'}">
+            <c:if test="${desc == false}">
+                <c:set var="lengthImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="lengthImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${lengthImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${lengthImageClass}" type="image" name="orderBy"
+               value="length" src="${lengthImage}">
+    </form>
+</th>
+<th>Views
+    <form method="POST" action="/searchClips">
+        <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
+        <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
+        <input type="hidden" name="championFacedString" value=${fn:escapeXml(param.championFacedString)}>
+        <input type="hidden" name="minLength" value=${fn:escapeXml(param.minLength)}>
+        <input type="hidden" name="maxLength" value=${fn:escapeXml(param.maxLength)}>
+        <c:forEach items="${roleCriteria}" var="role">
+            <c:out value='<input type="hidden" name="roleCriteria" value=${role}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:forEach items="${eloCriteria}" var="elo">
+            <c:out value='<input type="hidden" name="eloCriteria" value=${elo}>' escapeXml="false"></c:out>
+        </c:forEach>
+        <c:set var="viewsImage" value="/static/images/ui/buttons/button_sortDown.png"></c:set>
+        <c:set var="viewsImageClass" value="sortButtonDisabled"></c:set>
+        <c:if test="${orderBy == 'views'}">
+            <c:if test="${desc == false}">
+                <c:set var="viewsImage" value="/static/images/ui/buttons/button_sortUp.png"></c:set>
+            </c:if>
+            <c:set var="viewsImageClass" value="sortButtonEnabled"></c:set>
+        </c:if>
+        <c:choose>
+            <c:when test="${viewsImageClass eq 'sortButtonEnabled' && desc == true}">
+                <c:out value='<input type="hidden" name="desc" value="false">' escapeXml="false"></c:out>
+            </c:when>
+            <c:otherwise>
+                <c:out value='<input type="hidden" name="desc" value="true">' escapeXml="false"></c:out>
+            </c:otherwise>
+        </c:choose>
+        <input class="${viewsImageClass}" type="image" name="orderBy"
+               value="views" src="${viewsImage}">
+    </form>
+</th>
+<th>Rating</th>
+<th class="paginationHeader">
+    Page<br>
+    <c:set var="prevPage1" value="${param.p - 3}"></c:set>
+    <c:set var="prevPage2" value="${param.p - 2}"></c:set>
+    <c:set var="prevPage3" value="${param.p - 1}"></c:set>
+    <c:set var="nextPage1" value="${param.p + 1}"></c:set>
+    <c:set var="nextPage2" value="${param.p + 2}"></c:set>
+    <c:set var="nextPage3" value="${param.p + 3}"></c:set>
+    <c:if test="${param.p gt 1}">
+        <a href="?p=${param.p - 1}">&lt;</a>
+    </c:if>
 
-            <c:if test="${prevPage1 gt 1}">
-                <a href="?p=1">1</a>
-            </c:if>
+    <c:if test="${prevPage1 gt 1}">
+        <a href="?p=1">1</a>
+    </c:if>
 
-            <c:if test="${prevPage1 gt 2}">
-                ...
-            </c:if>
+    <c:if test="${prevPage1 gt 2}">
+        ...
+    </c:if>
 
-            <c:if test="${prevPage1 ge 1}">
-                <a class="page" href="?p=${prevPage1}">${prevPage1}</a>
-            </c:if>
-            <c:if test="${prevPage2 ge 1}">
-                <a class="page" href="?p=${prevPage2}">${prevPage2}</a>
-            </c:if>
-            <c:if test="${prevPage3 ge 1}">
-                <a class="page" href="?p=${prevPage3}">${prevPage3}</a>
-            </c:if>
+    <c:if test="${prevPage1 ge 1}">
+        <a class="page" href="?p=${prevPage1}">${prevPage1}</a>
+    </c:if>
+    <c:if test="${prevPage2 ge 1}">
+        <a class="page" href="?p=${prevPage2}">${prevPage2}</a>
+    </c:if>
+    <c:if test="${prevPage3 ge 1}">
+        <a class="page" href="?p=${prevPage3}">${prevPage3}</a>
+    </c:if>
 
-            <a class="page" id="curPage" href="?p=${param.p}" class="curentPage">${param.p}</a>
+    <a class="page" id="curPage" href="?p=${param.p}" class="curentPage">${param.p}</a>
 
-            <c:if test="${nextPage1 le numClipPages}">
-                <a class="page" href="?p=${nextPage1}">${nextPage1}</a>
-            </c:if>
-            <c:if test="${nextPage2 le numClipPages}">
-                <a class="page" href="?p=${nextPage2}">${nextPage2}</a>
-            </c:if>
-            <c:if test="${nextPage3 le numClipPages}">
-                <a class="page" href="?p=${nextPage3}">${nextPage3}</a>
-            </c:if>
+    <c:if test="${nextPage1 le numClipPages}">
+        <a class="page" href="?p=${nextPage1}">${nextPage1}</a>
+    </c:if>
+    <c:if test="${nextPage2 le numClipPages}">
+        <a class="page" href="?p=${nextPage2}">${nextPage2}</a>
+    </c:if>
+    <c:if test="${nextPage3 le numClipPages}">
+        <a class="page" href="?p=${nextPage3}">${nextPage3}</a>
+    </c:if>
 
-            <c:if test="${nextPage3 lt numClipPages}">
-                ...
-                <a class="page" href="?p=${numClipPages}">${numClipPages}</a>
-            </c:if>
+    <c:if test="${nextPage3 lt numClipPages}">
+        ...
+        <a class="page" href="?p=${numClipPages}">${numClipPages}</a>
+    </c:if>
 
-            <c:if test="${param.p lt numClipPages}">
-                <a href="?p=${param.p + 1}">&gt;</a>
-            </c:if></th>
-    </tr>
+    <c:if test="${param.p lt numClipPages}">
+        <a href="?p=${param.p + 1}">&gt;</a>
+    </c:if></th>
+</tr>
 
-    <c:forEach items="${clips}" var="clip" varStatus="status">
-        <tr class="clips">
-            <td><fmt:formatDate type="date" value="${clip.startTime}"/></td>
-            <td>
-                <form method="POST" id="streamerForm${status.index}" action="/searchClips">
-                    <input type='hidden' name='streamerName' value="${clip.streamerName}">
-                    <a href="javascript: submitForm('streamerForm${status.index}')">
-                            ${clip.streamerName}</a>
-                </form>
-            </td>
-            <td>
-                <form method="POST" id="roleForm${status.index}" action="/searchClips">
-                    <input type='hidden' name='roleCriteria' value="${clip.rolePlayed.name}">
-                    <a href="javascript: submitForm('roleForm${status.index}')">
-                            ${fn:toLowerCase(clip.rolePlayed.name)}</a>
-                </form>
-            </td>
-            <td colspan="2">
-                <form method="POST" id="champFormA${status.index}" action="/searchClips">
-                    <input class="avatarSelf" type='image' name='championPlayedString'
-                           value="${fn:toLowerCase(clip.championPlayed.name)}"
-                           src="static/images/avatars/avatar_${fn:toLowerCase(clip.championPlayed.name)}.png">
-                </form>
+<c:forEach items="${clips}" var="clip" varStatus="status">
+    <tr class="clips">
+        <td><fmt:formatDate type="date" value="${clip.startTime}"/></td>
+        <td>
+            <form method="POST" id="streamerForm${status.index}" action="/searchClips">
+                <input type='hidden' name='streamerName' value="${clip.streamerName}">
+                <input type="hidden" name="orderBy" value="start_time">
+                <input type="hidden" name="desc" value="true">
+                <a href="javascript: submitForm('streamerForm${status.index}')">
+                        ${clip.streamerName}</a>
+            </form>
+        </td>
+        <td>
+            <form method="POST" id="roleForm${status.index}" action="/searchClips">
+                <input type='hidden' name='roleCriteria' value="${clip.rolePlayed.name}">
+                <input type="hidden" name="orderBy" value="start_time">
+                <input type="hidden" name="desc" value="true">
+                <a href="javascript: submitForm('roleForm${status.index}')">
+                        ${fn:toLowerCase(clip.rolePlayed.name)}</a>
+            </form>
+        </td>
+        <td colspan="2">
+            <form method="POST" id="champFormA${status.index}" action="/searchClips">
+                <input type="hidden" name="orderBy" value="start_time">
+                <input type="hidden" name="desc" value="true">
+                <input class="avatarSelf" type='image' name='championPlayedString'
+                       value="${fn:toLowerCase(clip.championPlayed.name)}"
+                       src="static/images/avatars/avatar_${fn:toLowerCase(clip.championPlayed.name)}.png">
+            </form>
 
-                <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
-                <c:choose>
-                    <c:when test="${empty clip.lanePartnerChampion.name}">
-                        <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
-                               escapeXml="false"></c:out>
-                    </c:when>
-                    <c:otherwise>
-                        <c:set var="lanePartnerChampionName" value="${fn:toLowerCase(clip.lanePartnerChampion.name)}"/>
-                        <c:out value='<form method="POST" id="champFormB${status.index}" action="/searchClips">
+            <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
+            <c:choose>
+                <c:when test="${empty clip.lanePartnerChampion.name}">
+                    <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
+                           escapeXml="false"></c:out>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="lanePartnerChampionName" value="${fn:toLowerCase(clip.lanePartnerChampion.name)}"/>
+                    <c:out value='<form method="POST" id="champFormB${status.index}" action="/searchClips">
+                                      <input type="hidden" name="orderBy" value="start_time">
+                                      <input type="hidden" name="desc" value="true">
                                       <input class="avatar" type="image" name="championPlayedString" value="${lanePartnerChampionName}"
                                              src="static/images/avatars/avatar_${lanePartnerChampionName}.png"></form>'
-                               escapeXml="false">
-                        </c:out>
-                    </c:otherwise>
-                </c:choose>
+                           escapeXml="false">
+                    </c:out>
+                </c:otherwise>
+            </c:choose>
 
-                <img class="vs" src="/static/images/ui/vs.png"/>
+            <img class="vs" src="/static/images/ui/vs.png"/>
 
-                <form method="POST" id="champFormC${status.index}" action="/searchClips">
-                    <input class="avatarEnemy" type='image' name='championPlayedString'
-                           value="${fn:toLowerCase(clip.championFaced.name)}"
-                           src="static/images/avatars/avatar_${fn:toLowerCase(clip.championFaced.name)}.png">
-                </form>
+            <form method="POST" id="champFormC${status.index}" action="/searchClips">
+                <input type="hidden" name="orderBy" value="start_time">
+                <input type="hidden" name="desc" value="true">
+                <input class="avatarEnemy" type='image' name='championPlayedString'
+                       value="${fn:toLowerCase(clip.championFaced.name)}"
+                       src="static/images/avatars/avatar_${fn:toLowerCase(clip.championFaced.name)}.png">
+            </form>
 
-                <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
-                <c:choose>
-                    <c:when test="${empty clip.enemyLanePartnerChampion.name}">
-                        <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
-                               escapeXml="false"></c:out>
-                    </c:when>
-                    <c:otherwise>
-                        <c:set var="enemyLanePartnerChampionName"
-                               value="${fn:toLowerCase(clip.enemyLanePartnerChampion.name)}"/>
-                        <c:out value='<form method="POST" id="champFormD${status.index}" action="/searchClips">
+            <!-- Note cannot use <a href> here because a small line appears after image for some reason -->
+            <c:choose>
+                <c:when test="${empty clip.enemyLanePartnerChampion.name}">
+                    <c:out value='<img class="avatar" src="static/images/avatars/avatar_blank.png">'
+                           escapeXml="false"></c:out>
+                </c:when>
+                <c:otherwise>
+                    <c:set var="enemyLanePartnerChampionName"
+                           value="${fn:toLowerCase(clip.enemyLanePartnerChampion.name)}"/>
+                    <c:out value='<form method="POST" id="champFormD${status.index}" action="/searchClips">
+                                      <input type="hidden" name="orderBy" value="start_time">
+                                      <input type="hidden" name="desc" value="true">
                                       <input class="avatar" type="image" name="championPlayedString" value="${enemyLanePartnerChampionName}"
                                              src="static/images/avatars/avatar_${enemyLanePartnerChampionName}.png"></form>'
-                               escapeXml="false">
-                        </c:out>
-                    </c:otherwise>
-                </c:choose>
+                           escapeXml="false">
+                    </c:out>
+                </c:otherwise>
+            </c:choose>
 
-            </td>
-            <td>
-                <form method="POST" id="champFormC${status.index}" action="/searchClips">
-                    <input class="badgeChallenger" type='image' name='eloCriteria'
-                           value="${clip.generalElo}"
-                           src="static/images/badge/badge3_${fn:toLowerCase(clip.generalElo)}.png">
-                </form>
-            </td>
-            <td><fmt:formatNumber value="${clip.length / 60}" maxFractionDigits="0"/> min</td>
-            <td><fmt:formatNumber value="${clip.views}"/></td>
-            <td>9.5</td>
-            <td><a href="${clip.url}"><img class="watchButton"
-                                           src="static/images/ui/buttons/button_watchVideo.png"/></a></td>
-        </tr>
-    </c:forEach>
+        </td>
+        <td>
+            <form method="POST" id="champFormC${status.index}" action="/searchClips">
+                <input type="hidden" name="orderBy" value="start_time">
+                <input type="hidden" name="desc" value="true">
+                <input class="badgeChallenger" type='image' name='eloCriteria'
+                       value="${clip.generalElo}"
+                       src="static/images/badge/badge3_${fn:toLowerCase(clip.generalElo)}.png">
+            </form>
+        </td>
+        <td><fmt:formatNumber value="${clip.length / 60}" maxFractionDigits="0"/> min</td>
+        <td><fmt:formatNumber value="${clip.views}"/></td>
+        <td>9.5</td>
+        <td><a href="${clip.url}"><img class="watchButton"
+                                       src="static/images/ui/buttons/button_watchVideo.png"/></a></td>
+    </tr>
+</c:forEach>
 
 </table>
 </form>

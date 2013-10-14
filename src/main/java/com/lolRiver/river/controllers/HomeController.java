@@ -5,6 +5,7 @@ import com.lolRiver.river.models.Champion;
 import com.lolRiver.river.models.Clip;
 import com.lolRiver.river.models.Streamer;
 import com.lolRiver.river.persistence.DaoCollection;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,7 +51,7 @@ public class HomeController {
             List<String> list = new ArrayList<String>();
             List<Streamer> streamers = daoCollection.getStreamerDao().getStreamers();
             for (Streamer streamer : streamers) {
-                list.add(streamer.getName());
+                list.add(WordUtils.capitalizeFully(streamer.getName()));
             }
             streamerList = new ArrayList<String>(list);
         }
@@ -99,24 +100,35 @@ public class HomeController {
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String getClips(ModelMap modelMap,
-                           @RequestParam(value = "p", defaultValue = "1") int offset,
-                           @RequestParam(value = "orderBy", defaultValue = "start_time") String orderBy,
-                           @RequestParam(value = "desc", defaultValue = "false") boolean descending) throws Exception {
+                           @RequestParam(value = "p", defaultValue = "1") int offset) throws Exception {
         List<Clip> clips = daoCollection.getClipDao().getClips((offset - 1) * Constants.MAX_CLIPS_PER_TABLE,
                                                               Constants.MAX_CLIPS_PER_TABLE,
-                                                              orderBy, descending);
+                                                              "start_time", true);
         modelMap.addAttribute("clips", clips);
 
         int numClipPages = 45;//1 + daoCollection.getClipDao().getNumTotalClips() / Constants.MAX_CLIPS_PER_TABLE;
         modelMap.addAttribute("numClipPages", numClipPages);
 
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
+        modelMap.addAttribute("orderBy", "start_time");
+        modelMap.addAttribute("desc", "true");
         return "index";
     }
 
     @RequestMapping(value = {"/searchClips"}, method = RequestMethod.POST)
-    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip) {
-        List<Clip> clips = daoCollection.getClipDao().getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, "start_time", false, clip);
+    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip,
+                              @RequestParam(value = "orderBy") String orderBy,
+                              @RequestParam(value = "desc") boolean descending) {
+        // front-end sends length in minutes, so convert to seconds
+        if (!StringUtils.isBlank(clip.getMinLength())) {
+            clip.setMinLength(String.valueOf(Integer.valueOf(clip.getMinLength()) * 60));
+        }
+        if (!StringUtils.isBlank(clip.getMaxLength())) {
+            clip.setMaxLength(String.valueOf(Integer.valueOf(clip.getMaxLength()) * 60));
+        }
+
+        List<Clip> clips = daoCollection.getClipDao().getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, orderBy,
+                                                                      descending, clip);
         modelMap.addAttribute("clips", clips);
 
         // pass back in the posted checkboxes to leave them checked
@@ -134,6 +146,8 @@ public class HomeController {
         }
 
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
+        modelMap.addAttribute("orderBy", orderBy);
+        modelMap.addAttribute("desc", descending);
         return "index";
     }
 
