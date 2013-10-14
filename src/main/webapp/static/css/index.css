@@ -15,23 +15,12 @@ body {
     min-width: 1300px;
 }
 
-h1 {
-    color: black;
-    text-align: left;
-    font-size: 40px;
-}
-
-p {
-    font-family: "Times New Roman";
-    font-size: 70px;
-}
-
 img.logo {
     float: left;
     border-radius: 25px;
-    margin-left: 160px;
-    margin-right: 115px;
-    margin-top: 60px;
+    margin-left: 62px;
+    margin-right: 54px;
+    margin-top: 52px;
     display: block;
 }
 
@@ -71,6 +60,18 @@ img.watchButton {
     height: 40px;
 }
 
+img.sortButtonDisabled {
+    opacity: 0.3;
+    width: 25px;
+    height: 15px;
+}
+
+img.sortButtonEnabled {
+    opacity: 1;
+    width: 25px;
+    height: 15px;
+}
+
 /* Start - http://stackoverflow.com/questions/306252/how-to-align-checkboxes-and-their-labels-consistently-cross-browsers */
 input {
     padding: 0;
@@ -81,6 +82,100 @@ input {
     left: -4px;
     *overflow: hidden;
 }
+
+/* Checkboxes - http://csscheckbox.com/
+
+/*general styles for all CSS Checkboxes*/
+label {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input[type=checkbox].css-checkbox {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+}
+
+input[type=checkbox].css-checkbox + label.css-label {
+    padding-left: 20px;
+    height: 15px;
+    display: inline-block;
+    line-height: 15px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=checkbox].css-checkbox:checked + label.css-label {
+    background-position: 0 -15px;
+}
+
+.web-two-style {
+    background-image: url(/static/images/ui/checkboxes/checkbox_search.png);
+}
+
+input[type=checkbox].css-checkbox.med + label.css-label.med {
+    padding-left: 22px;
+    height: 17px;
+    display: inline-block;
+    line-height: 17px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=checkbox].css-checkbox.med:checked + label.css-label.med {
+    background-position: 0 -17px;
+}
+
+input[type=checkbox].css-checkbox.sme + label.css-label.sme {
+    padding-left: 22px;
+    height: 16px;
+    display: inline-block;
+    line-height: 16px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=checkbox].css-checkbox.sme:checked + label.css-label.sme {
+
+    background-position: 0 -16px;
+}
+
+input[type=checkbox].css-checkbox.lrg + label.css-label.lrg {
+    padding-left: 22px;
+    height: 20px;
+    display: inline-block;
+    line-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 15px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=checkbox].css-checkbox.lrg:checked + label.css-label.lrg {
+    background-position: 0 -20px;
+}
+
+/* END checkbox */
 
 input.searchButton {
     padding-top: 22px;
@@ -111,6 +206,8 @@ table.search {
     border: 8px groove brown;
     border-collapse: collapse;
     table-layout: fixed;
+    background-color: gray;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 td.randomSkin {
@@ -121,10 +218,17 @@ td.randomSkin {
 td.search {
     padding-top: 7px;
     padding-bottom: 9px;
-    padding-left: 18px;
+    padding-left: 10px;
     border: none;
     text-align: left;
     vertical-align: text-top;
+}
+
+td.searchBox {
+    padding-top: 9px;
+    padding-bottom: 9px;
+    border: none;
+    text-align: left;
 }
 
 td.searchRole {
@@ -132,6 +236,7 @@ td.searchRole {
     border: none;
     text-align: left;
     vertical-align: text-top;
+    padding-left: 20px;
 }
 
 td.searchTier {
@@ -141,8 +246,11 @@ td.searchTier {
     vertical-align: text-top;
 }
 
-td.paginationHeader {
+th.paginationHeader {
     text-align: center;
+    background-color: gray;
+    color: black;
+    font-size: 16px;
 }
 
 td.checkBox {
@@ -155,26 +263,26 @@ td.checkBox {
 table.clips {
     border: 4px solid black;
     margin-left: 35px;
-    min-width: 1300px;
-    max-width: 1300px;
+    min-width: 1350px;
+    max-width: 1350px;
     table-layout: fixed;
     border-collapse: collapse;
     font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
-tr:not(:first-child):hover {
+tr.clips:not(:first-child):hover {
     background-color: lightgreen;
 }
 
-tr:nth-child(1) {
+tr.clips:nth-child(1) {
     background-color: #A8A8A8;
 }
 
-tr:nth-child(2n + 3) {
+tr.clips:nth-child(2n + 3) {
     background-color: antiquewhite;
 }
 
-tr:nth-child(even) {
+tr.clips:nth-child(even) {
     background-color: lightblue;
 }
 

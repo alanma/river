@@ -12,11 +12,11 @@ import java.util.List;
 
 public class Elo {
     public enum Name {
-        BRONZE1, BRONZE2, BRONZE3, BRONZE4, BRONZE5,
-        SILVER1, SILVER2, SILVER3, SILVER4, SILVER5,
-        GOLD1, GOLD2, GOLD3, GOLD4, GOLD5,
-        PLATINUM1, PLATINUM2, PLATINUM3, PLATINUM4, PLATINUM5,
-        DIAMOND1, DIAMOND2, DIAMOND3, DIAMOND4, DIAMOND5,
+        BRONZE5, BRONZE4, BRONZE3, BRONZE2, BRONZE1,
+        SILVER5, SILVER4, SILVER3, SILVER2, SILVER1,
+        GOLD5, GOLD4, GOLD3, GOLD2, GOLD1,
+        PLATINUM5, PLATINUM4, PLATINUM3, PLATINUM2, PLATINUM1,
+        DIAMOND5, DIAMOND4, DIAMOND3, DIAMOND2, DIAMOND1,
         CHALLENGER
     }
 
@@ -52,6 +52,42 @@ public class Elo {
         }
         if (time == null) {
             list.add(TIME_STRING);
+        }
+        return list;
+    }
+
+    public static String generalEloFromElo(Elo elo) {
+        if (elo == null) {
+            return "NONE";
+        }
+
+        int ord = elo.name.ordinal();
+        if (ord == Name.CHALLENGER.ordinal()) {
+            return Name.CHALLENGER.name();
+        } else if (ord >= Name.DIAMOND5.ordinal()) {
+            return "DIAMOND";
+        } else if (ord >= Name.PLATINUM5.ordinal()) {
+            return "PLATINUM";
+        } else if (ord >= Name.GOLD5.ordinal()) {
+            return "GOLD";
+        } else if (ord >= Name.SILVER5.ordinal()) {
+            return "SILVER";
+        } else if (ord >= Name.BRONZE5.ordinal()) {
+            return "BRONZE";
+        }
+        return "NONE";
+    }
+
+    public static List<String> dbEloFromGeneralElo(String generalElo) {
+        List<String> list = new ArrayList<String>();
+        if (generalElo != null) {
+            if (generalElo.equals("CHALLENGER")) {
+                list.add(generalElo);
+            } else {
+                for (int i = 1; i <= 5; i++) {
+                    list.add(generalElo + i);
+                }
+            }
         }
         return list;
     }

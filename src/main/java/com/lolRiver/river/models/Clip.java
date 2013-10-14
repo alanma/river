@@ -44,7 +44,8 @@ public class Clip {
     /* START - Non DB variables */
     private String timeSinceNowMessage;     // used for index.jsp
 
-    // front-end input for searching clips
+    // front-end related for searching clips
+    private String generalElo;
     private String championPlayedString;
     private String championFacedString;
     private List<String> eloCriteria;
@@ -195,6 +196,15 @@ public class Clip {
 
     public Clip setTimeSinceNowMessage(String timeSinceNowMessage) {
         this.timeSinceNowMessage = timeSinceNowMessage;
+        return this;
+    }
+
+    public String getGeneralElo() {
+        return generalElo;
+    }
+
+    public Clip setGeneralElo(String generalElo) {
+        this.generalElo = generalElo;
         return this;
     }
 

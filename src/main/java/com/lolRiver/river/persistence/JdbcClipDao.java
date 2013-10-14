@@ -157,14 +157,8 @@ public class JdbcClipDao implements ClipDao {
                 sb.append(" AND ");
             }
             List<String> dbSpecificEloCriteria = new ArrayList<String>();
-            for (String s : eloCriteria) {
-                if (s.equals("CHALLENGER")) {
-                    dbSpecificEloCriteria.add(s);
-                } else {
-                    for (int i = 1; i <= 5; i++) {
-                        dbSpecificEloCriteria.add(s + i);
-                    }
-                }
+            for (String generalElo : eloCriteria) {
+                dbSpecificEloCriteria.addAll(Elo.dbEloFromGeneralElo(generalElo));
             }
             sb.append(Clip.ELO_STRING + " IN " + SqlQueryUtil.inClause(dbSpecificEloCriteria, true));
         }
@@ -265,6 +259,7 @@ public class JdbcClipDao implements ClipDao {
             final String elo = resultSet.getString(Clip.ELO_STRING);
 
             // non-db variables
+            final String generalElo = Elo.generalEloFromElo(Elo.fromString(elo));
             final String timeSinceNowMessage = DateUtil.timeSinceNowMessage(startTime);
 
             return new Clip()
@@ -283,6 +278,7 @@ public class JdbcClipDao implements ClipDao {
                    .setLanePartnerChampion(Champion.fromString(lanePartnerChampion))
                    .setEnemyLanePartnerChampion(Champion.fromString(enemyLanePartnerChampion))
                    .setElo(Elo.fromString(elo))
+                   .setGeneralElo(generalElo)
                    .setTimeSinceNowMessage(timeSinceNowMessage);
         }
     }
