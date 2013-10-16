@@ -77,6 +77,7 @@ public class Game {
 
     public boolean isViewable() {
         if (!validateEverything().isEmpty()) {
+            LOGGER.error("Game not viewable due to invalid fields: " + validateEverything() + "GAME: " + this);
             return false;
         }
 
@@ -252,7 +253,7 @@ public class Game {
         }
 
         if (getAllPlayers().size() != 10 &&
-            type.equals(Type.RANKED_TEAM_5x5.name()) || type.equals(Type.RANKED_SOLO_5x5.name())) {
+            (type.equals(Type.RANKED_TEAM_5x5.name()) || type.equals(Type.RANKED_SOLO_5x5.name()))) {
             list.add("Bad playersInfo size for game type: " + type + " playersInfo: " + playersInfo);
         }
         return list;

@@ -10,6 +10,8 @@ frontend
 
 Features
     Frontend
+        - put margin at bottom of clips table, put navigation bar w/ faq, contact, info
+        - convert champion name enum to reader friendly version
         - Dates:
             - make dates show X min ago, X days ago like lolking
                 - fuzzy time, jquery/javascript, if it works, remove the java code I wrote to try and do this...
@@ -36,6 +38,7 @@ Bugs
         - Eliminate bad video conversion logs:
             - need to remove all videos with start_time < earliest start_time of that streamer
             - need to remove all games with players_info = null after I figure out where that bug is from
+            - games that haven't had start_time and length set shouldn't be matched with a video
 
         - Eliminate bad game fetching:
             - players_info can be null, can have wrong size (gameId 1104957034)
