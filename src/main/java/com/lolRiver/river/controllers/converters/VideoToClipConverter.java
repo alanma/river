@@ -35,6 +35,7 @@ public class VideoToClipConverter {
         List<Game> matchingGames = daoCollection.getGameDao().getGamesMatchingVideo(video);
         for (Game matchingGame : matchingGames) {
             Clip clip = new Clip().setGameType(Game.gameTypeFromString(matchingGame.getType()));
+            clip.setViewable(matchingGame.isViewable());
             if (matchingGame.isViewable()) {
                 clip.setGameId(matchingGame.getId())
                 .setVideoId(video.getId())
@@ -93,8 +94,9 @@ public class VideoToClipConverter {
             }
         }
         if (playerMatchingStreamer == null) {
-            LOGGER.error(String.format("Couldn't find any of streamer's usernames for game. usernames: %s, game: %s",
-                                      lolUsers, game));
+            LOGGER.error(String.format("Couldn't find any of streamer's usernames for game. usernames: %s, " +
+                                       "game: %s playerToRoleMap.keyset(): %s",
+                                      lolUsers, game, playerToRoleMap.keySet()));
             return;
         }
 
@@ -124,8 +126,12 @@ public class VideoToClipConverter {
         List<Player> redPlayers = game.getRedPlayers();
 
         Map<Player, Role> map = new HashMap<Player, Role>();
-        insertRolesFromPlayers(bluePlayers, map, game, video);
-        insertRolesFromPlayers(redPlayers, map, game, video);
+        try {
+            insertRolesFromPlayers(bluePlayers, map, game, video);
+            insertRolesFromPlayers(redPlayers, map, game, video);
+        } catch (Exception e) {
+            LOGGER.error("Error guessing roles: " + e + game + "\n" + video + "\n");
+        }
         return map;
     }
 
@@ -153,6 +159,10 @@ public class VideoToClipConverter {
         availableRoles.add(new Role(Role.Name.SUPP));
         availableRoles.add(new Role(Role.Name.ADC));
 
+        if (availablePlayers.size() != availableRoles.size()) {
+            throw new RuntimeException("sizes for available players and available roles don't match initially: " + availablePlayers
+                                       + " roles: " + availableRoles);
+        }
         // deduce easy roles to identify via summoner spells
         for (Player player : players) {
             if (player.hasSummonerSpell(SummonerSpell.Name.SMITE)) {

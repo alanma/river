@@ -45,6 +45,7 @@ public class Clip {
 
     /* START - Non DB variables */
     private String timeSinceNowMessage;     // used for index.jsp
+    private boolean isViewable; // set by video converter to know if clip is viewable
 
     // front-end related for searching clips
     private String generalElo;
@@ -56,16 +57,6 @@ public class Clip {
     private String maxLength;
 
     /* END - Non DB variables */
-
-    public boolean isViewable() {
-        switch (gameType) {
-            case RANKED_SOLO_5x5:
-            case RANKED_TEAM_5x5:
-            case NORMAL:
-                return true;
-        }
-        return false;
-    }
 
     public int getId() {
         return id;
@@ -218,6 +209,14 @@ public class Clip {
     public Clip setTimeSinceNowMessage(String timeSinceNowMessage) {
         this.timeSinceNowMessage = timeSinceNowMessage;
         return this;
+    }
+
+    public boolean isViewable() {
+        return isViewable;
+    }
+
+    public void setViewable(boolean viewable) {
+        isViewable = viewable;
     }
 
     public String getGeneralElo() {

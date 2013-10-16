@@ -113,6 +113,8 @@ public class LeagueGameToGameConverter {
     }
 
     private void initPlayerInfos(Game game, LeagueGame leagueGame) {
+        String error = "couldn't serialize playerInfo from leagueGame: " + leagueGame + "\n";
+
         try {
             Map<String, String> map = new HashMap<String, String>();
             Map<String, Player> champions = leagueGame.getPlayerChampionSelections();
@@ -122,9 +124,12 @@ public class LeagueGameToGameConverter {
                 map.put(playerId, playerInfo);
             }
             String playerInfo = mapper.writeValueAsString(map);
+            if (playerInfo == null) {
+                throw new RuntimeException(error);
+            }
             game.setPlayersInfo(playerInfo);
         } catch (Exception e) {
-            LOGGER.error("couldn't serialize playerInfo from leagueGame: " + leagueGame + "\n");
+            LOGGER.error(error, e);
         }
     }
 }

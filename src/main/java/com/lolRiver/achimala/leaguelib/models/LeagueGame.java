@@ -112,7 +112,8 @@ public class LeagueGame implements PlayerList {
                     player.setUsername(enemyTeamSummonerInternalNames.get(summonerInternalName));
                     player.setTeamId(300 - _playerTeamType.getTeamId());
                 } else {
-                    LOGGER.error("summonerInternalName: " + summonerInternalName + " not found in teamOne or teamTwo: " + obj);
+                    LOGGER.error("summonerInternalName: " + summonerInternalName + " not found in teamOne or teamTwo:" +
+                                 " OBJECT: " + o + " OBJECTS: " + obj);
                 }
 
                 player.setChampionPlayed(Champion.fromId(String.valueOf(to.getInt("championId"))));
@@ -130,7 +131,7 @@ public class LeagueGame implements PlayerList {
                     }
                 }
                 if (!foundUserId) {
-                    LOGGER.error("Didn't find userId for internalUsername: " + summonerInternalName);
+                    LOGGER.error("Didn't find userId for internalUsername: " + summonerInternalName + " OBJECT: " + o + " OBJECTS: " + obj);
                 }
                 _playerChampionSelections.put(userId, player);
             }

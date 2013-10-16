@@ -76,8 +76,17 @@ public class Game {
     }
 
     public boolean isViewable() {
-        return type.equals(Type.RANKED_SOLO_5x5.name()) || type.equals(Type.RANKED_TEAM_5x5) ||
-               type.equals(Type.NORMAL.name());
+        if (!validateEverything().isEmpty()) {
+            return false;
+        }
+
+        if (type.equals(Type.RANKED_SOLO_5x5.name()) || type.equals(Type.RANKED_TEAM_5x5)) {
+            return true;
+        }
+        if (type.equals(Type.NORMAL.name()) && getAllPlayers().size() == 10) {
+            return true;
+        }
+        return false;
     }
 
     public boolean hasPlayerRoles() {
@@ -166,6 +175,29 @@ public class Game {
         return redPlayers;
     }
 
+    public List<String> validateEverything() {
+        List<String> list = new ArrayList<String>();
+
+        String error = invalidTypeField();
+        if (error != null) {
+            list.add(error);
+        }
+        error = invalidStartTime();
+        if (error != null) {
+            list.add(error);
+        }
+        error = invalidEndTime();
+        if (error != null) {
+            list.add(error);
+        }
+        error = invalidLength();
+        if (error != null) {
+            list.add(error);
+        }
+        list.addAll(invalidPlayerFields());
+        return list;
+    }
+
     public String invalidTypeField() {
         return StringUtils.isBlank(type) ? TYPE_STRING : null;
     }
@@ -217,6 +249,11 @@ public class Game {
 
         for (Player player : getAllPlayers()) {
             list.addAll(appendStringToPlayerInvalidFields(player.getUsername(), player.invalidFields()));
+        }
+
+        if (getAllPlayers().size() != 10 &&
+            type.equals(Type.RANKED_TEAM_5x5.name()) || type.equals(Type.RANKED_SOLO_5x5.name())) {
+            list.add("Bad playersInfo size for game type: " + type + " playersInfo: " + playersInfo);
         }
         return list;
     }

@@ -86,7 +86,14 @@ public class TwitchVideoFetcher implements VideoFetcher {
                 if (video.getStartTime().after(TWITCH_VIDEO_MIN_START_TIME)) {
                     video.setStreamerName(streamerName);
                     insertedVideo = videoDao.insertVideo(video);
-                    numInserted++;
+
+                    // we never delete videos, so that we can stop when we hit a video that's already in the DB,
+                    // meaning we can hackishly specify a min_start_time for each player
+                    if (insertedVideo == null) {
+                        shouldFetchNextVideos = false;
+                    } else {
+                        numInserted++;
+                    }
                 }
                 if (shouldFetchNextVideos && insertedVideo == null) {
                     shouldFetchNextVideos = false;
