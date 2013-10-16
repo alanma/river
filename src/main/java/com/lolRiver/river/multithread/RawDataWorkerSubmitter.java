@@ -44,8 +44,8 @@ public class RawDataWorkerSubmitter extends WorkerSubmitter {
         kassadinWorkerStarter.setLastStart(now);
         riotWorkerStarter.setLastStart(now);
         twitchWorkerStarter.setLastStart(now);
-        workerStarters.add(kassadinWorkerStarter);
-        workerStarters.add(riotWorkerStarter);
+        //workerStarters.add(kassadinWorkerStarter);
+        //workerStarters.add(riotWorkerStarter);
         //workerStarters.add(twitchWorkerStarter);
 
         super.init(startNow);

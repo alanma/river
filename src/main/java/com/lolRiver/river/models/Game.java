@@ -59,12 +59,25 @@ public class Game {
     private List<Player> redPlayers;
     private List<Player> allPlayers;
 
-    private enum Type {
+    public enum Type {
         NONE,
         RANKED_SOLO_5x5,
         RANKED_TEAM_5x5,
+        RANKED_TEAM_3x3,
         ARAM_UNRANKED_5x5,
         NORMAL
+    }
+
+    public static Type gameTypeFromString(String s) {
+        if (StringUtils.isBlank(s)) {
+            return Type.NONE;
+        }
+        return Type.valueOf(s);
+    }
+
+    public boolean isViewable() {
+        return type.equals(Type.RANKED_SOLO_5x5.name()) || type.equals(Type.RANKED_TEAM_5x5) ||
+               type.equals(Type.NORMAL.name());
     }
 
     public boolean hasPlayerRoles() {
@@ -116,8 +129,9 @@ public class Game {
                 try {
                     Map<String, String> map = mapper.readValue(playersInfo, new TypeReference<Map<String,
                                                                                                  String>>() {});
-                    for (String playerInfo : map.values()) {
-                        Player player = Player.playerFromPlayerInfo(playerInfo);
+                    for (String playerId : map.keySet()) {
+                        String playerInfo = map.get(playerId);
+                        Player player = Player.playerFromPlayerInfo(playerInfo, playerId);
                         if (player.isBlueSide()) {
                             bluePlayers.add(player);
                         }
@@ -137,8 +151,9 @@ public class Game {
                 try {
                     Map<String, String> map = mapper.readValue(playersInfo, new TypeReference<Map<String,
                                                                                                  String>>() {});
-                    for (String playerInfo : map.values()) {
-                        Player player = Player.playerFromPlayerInfo(playerInfo);
+                    for (String playerId : map.keySet()) {
+                        String playerInfo = map.get(playerId);
+                        Player player = Player.playerFromPlayerInfo(playerInfo, playerId);
                         if (player.isRedSide()) {
                             redPlayers.add(player);
                         }

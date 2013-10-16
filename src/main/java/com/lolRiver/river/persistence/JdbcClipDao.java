@@ -1,9 +1,6 @@
 package com.lolRiver.river.persistence;
 
-import com.lolRiver.river.models.Champion;
-import com.lolRiver.river.models.Clip;
-import com.lolRiver.river.models.Elo;
-import com.lolRiver.river.models.Role;
+import com.lolRiver.river.models.*;
 import com.lolRiver.river.persistence.interfaces.ClipDao;
 import com.lolRiver.river.util.DateUtil;
 import com.lolRiver.river.util.StringUtil;
@@ -41,7 +38,7 @@ public class JdbcClipDao implements ClipDao {
 
     private static String GET_CLIPS_HEAD_SQL = "SELECT * FROM clips";
 
-    private static String INSERT_SQL = "INSERT INTO clips (video_id, game_id, streamer_name, start_time, end_time, length, views, url, champion_played, role_played, champion_faced, lane_partner_champion, enemy_lane_partner_champion, elo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static String INSERT_SQL = "INSERT INTO clips (video_id, game_id, streamer_name, start_time, end_time, length, views, url, champion_played, role_played, champion_faced, lane_partner_champion, enemy_lane_partner_champion, elo, game_type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     private NamedParameterJdbcTemplate namedParamJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
@@ -228,6 +225,12 @@ public class JdbcClipDao implements ClipDao {
                         LOGGER.error("trying to insert clip with empty field elo: " + clip);
                     }
                     ps.setString(14, elo == null ? "" : elo.getName().name());
+
+                    Game.Type gameType = clip.getGameType();
+                    if (gameType == null) {
+                        LOGGER.error("trying to insert clip with empty field gameType: " + clip);
+                    }
+                    ps.setString(15, gameType == null ? "" : gameType.name());
                     return ps;
                 }
             }, holder);
@@ -250,6 +253,7 @@ public class JdbcClipDao implements ClipDao {
             final Timestamp endTime = resultSet.getTimestamp(Clip.END_TIME_STRING);
             final int length = resultSet.getInt(Clip.LENGTH_STRING);
             final int views = resultSet.getInt(Clip.VIEWS_STRING);
+            final String gameType = resultSet.getString(Clip.GAME_TYPE_STRING);
             final String url = resultSet.getString(Clip.URL_STRING);
             final String championPlayed = resultSet.getString(Clip.CHAMPION_PLAYED_STRING);
             final String rolePlayed = resultSet.getString(Clip.ROLE_PLAYED_STRING);
@@ -272,6 +276,7 @@ public class JdbcClipDao implements ClipDao {
                    .setLength(length)
                    .setViews(views)
                    .setUrl(url)
+                   .setGameType(Game.gameTypeFromString(gameType))
                    .setChampionPlayed(Champion.fromString(championPlayed))
                    .setRolePlayed(Role.fromString(rolePlayed))
                    .setChampionFaced(Champion.fromString(championFaced))

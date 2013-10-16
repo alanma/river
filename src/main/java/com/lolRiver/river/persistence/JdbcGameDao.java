@@ -41,8 +41,7 @@ public class JdbcGameDao implements GameDao {
     private static String INSERT_SQL = "INSERT INTO games (id, type, blue_player1_id, blue_player2_id, blue_player3_id, blue_player4_id, blue_player5_id, red_player1_id, red_player2_id, red_player3_id, red_player4_id, red_player5_id, players_info, won, start_time, end_time, length) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     private static String UPDATE_SQL = "UPDATE games " +
-                                       "SET won = ?" +
-                                       ", length = ?" +
+                                       "SET won = ?" + ", length = ?" +
                                        ", end_time = ?" +
                                        " WHERE id = ?";
 
@@ -89,6 +88,10 @@ public class JdbcGameDao implements GameDao {
 
         List<LolUser> users = daoCollection.getLolUserDao().getLolUsersFromStreamer(new Streamer(video
                                                                                                  .getStreamerName()));
+        if (users.isEmpty()) {
+            LOGGER.error("no users found for streamer: " + video.getStreamerName() + " video: " + video);
+            return new ArrayList<Game>();
+        }
 
         List<String> userIds = new ArrayList<String>();
         for (LolUser user : users) {

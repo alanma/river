@@ -23,10 +23,13 @@ import com.lolRiver.achimala.leaguelib.models.LeagueSummoner;
 import com.lolRiver.achimala.leaguelib.models.LeagueSummonerProfileInfo;
 import com.lolRiver.achimala.util.Callback;
 import com.lolRiver.rtmp.TypedObject;
+import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 
 public class SummonerService extends LeagueAbstractService {
+    private static final Logger LOGGER = Logger.getLogger(SummonerService.class.getName());
+
     public SummonerService(LeagueConnection connection) {
         super(connection);
     }
@@ -36,8 +39,9 @@ public class SummonerService extends LeagueAbstractService {
     }
 
     private LeagueSummoner getSummonerFromResult(TypedObject obj, String name) throws LeagueException {
-        if (obj.getTO("body") == null)
+        if (obj.getTO("body") == null) {
             throw new LeagueException(LeagueErrorCode.SUMMONER_NOT_FOUND, "Summoner " + name + " not found.", name);
+        }
         return new LeagueSummoner(obj.getTO("body"), getConnection().getServer());
     }
 
@@ -90,11 +94,6 @@ public class SummonerService extends LeagueAbstractService {
                 callback.onError(ex);
             }
         });
-    }
-
-    public LeagueSummoner getSummonerByName(String name) throws LeagueException {
-        TypedObject obj = call("getSummonerByName", new Object[]{name});
-        return getSummonerFromResult(obj, name);
     }
 
     public void getSummonerByName(final String name, final Callback<LeagueSummoner> callback) {

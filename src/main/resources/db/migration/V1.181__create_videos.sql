@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS `videos` (
   `length`        INT,
   `views`         INT,
   `url`           VARCHAR(255),
+  `state`         VARCHAR(31)  NOT NULL DEFAULT 'QUEUED',
+  `queued_at`     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `other`         MEDIUMTEXT,
   `filler1`       VARCHAR(127),
   `filler2`       VARCHAR(127),

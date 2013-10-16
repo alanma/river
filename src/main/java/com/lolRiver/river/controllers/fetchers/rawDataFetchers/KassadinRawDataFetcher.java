@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lolRiver.config.ConfigMap;
 import com.lolRiver.river.controllers.deserializers.rawDataDeserializers.kassadin.KassadinEloDeserializer;
 import com.lolRiver.river.controllers.deserializers.rawDataDeserializers.kassadin.KassadinGameDeserializer;
+import com.lolRiver.river.controllers.deserializers.rawDataDeserializers.kassadin.KassadinSummonerIdDeserializer;
 import com.lolRiver.river.models.Elo;
 import com.lolRiver.river.models.Game;
 import com.lolRiver.river.models.LolUser;
@@ -15,6 +16,7 @@ import com.lolRiver.river.util.WebDataFetcher;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.security.internal.spec.TlsPrfParameterSpec;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class KassadinRawDataFetcher implements RawDataFetcher {
     private final String HEADER_API_KEY_VALUE;
     private final String RECENT_GAMES_FROM_REGION_USERNAME_URL;
     private final String ELO_FROM_REGION_USERNAME_URL;
+    private final String SUMMONER_ID_FROM_REGION_USERNAME_URL;
 
     @Autowired
     private WebDataFetcher webDataFetcher;
@@ -43,6 +46,9 @@ public class KassadinRawDataFetcher implements RawDataFetcher {
 
     @Autowired
     private KassadinEloDeserializer eloDeserializer;
+
+    @Autowired
+    private KassadinSummonerIdDeserializer summonerIdDeserializer;
 
     @Autowired
     private GameDao gameDao;
@@ -68,6 +74,7 @@ public class KassadinRawDataFetcher implements RawDataFetcher {
         HEADER_API_KEY_VALUE = kassadinConfigMap.getString("header_api_key_value");
         RECENT_GAMES_FROM_REGION_USERNAME_URL = kassadinConfigMap.getString("recent_games_from_region_username_url");
         ELO_FROM_REGION_USERNAME_URL = kassadinConfigMap.getString("elo_from_region_username_url");
+        SUMMONER_ID_FROM_REGION_USERNAME_URL = kassadinConfigMap.getString("summoner_id_from_region_username_url");
     }
 
     @Override
@@ -182,5 +189,11 @@ public class KassadinRawDataFetcher implements RawDataFetcher {
 
     public String sendGet(String url) throws Exception {
         return webDataFetcher.get(url, HEADER_API_KEY_NAME, HEADER_API_KEY_VALUE);
+    }
+
+    public int fetchSummonerId(String username, String region) throws Exception {
+        String url = String.format(SUMMONER_ID_FROM_REGION_USERNAME_URL, region, username.replace(" ", "%20"));
+        String json = sendGet(url);
+        return summonerIdDeserializer.summonerIdFromJson(json);
     }
 }

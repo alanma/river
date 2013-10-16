@@ -48,7 +48,7 @@ public class AppConfiguration {
         dataSource.setUser(dbConfig.getString("username"));
         dataSource.setPassword(dbConfig.getString("password"));
         dataSource.setMinPoolSize(5);
-        dataSource.setMaxPoolSize(20);
+        dataSource.setMaxPoolSize(30);
         dataSource.setMaxStatements(50);
         dataSource.setIdleConnectionTestPeriod(3000);
         dataSource.setLoginTimeout(300);

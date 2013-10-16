@@ -6,6 +6,8 @@ import com.lolRiver.river.multithread.workerStarters.WorkerStarter;
 import com.lolRiver.river.multithread.workers.Worker;
 import org.apache.log4j.Logger;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,12 +32,12 @@ public abstract class WorkerSubmitter implements Runnable {
 
     protected List<WorkerStarter> workerStarters;
 
-    //@PostConstruct
+    @PostConstruct
     public void setup() {
         setup(false);
     }
 
-    //@PreDestroy
+    @PreDestroy
     public void teardown() {
         if (!hasStarted) {
             LOGGER.warn("Trying to stop when it hasn't started");

@@ -25,6 +25,9 @@ public class ConfigMap {
 
     private ConfigMap(String key, Map<String, Object> map) {
         Map<String, Object> newMap = (Map<String, Object>)map.get(key);
+        if (newMap == null) {
+            throw new IllegalArgumentException("no configmap exists for key: " + key);
+        }
         this.map = new HashMap<String, Object>(newMap);
     }
 

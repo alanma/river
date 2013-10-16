@@ -2,6 +2,7 @@ package com.lolRiver.river.controllers;
 
 import com.lolRiver.achimala.leaguelib.MainClient;
 import com.lolRiver.achimala.leaguelib.connection.LeagueServer;
+import com.lolRiver.river.controllers.fetchers.rawDataFetchers.KassadinRawDataFetcher;
 import com.lolRiver.river.models.LolUser;
 import com.lolRiver.river.models.Streamer;
 import com.lolRiver.river.persistence.DaoCollection;
@@ -25,11 +26,15 @@ import java.util.Map;
  */
 
 @Controller
+// TODO make this possible to be called by me only since it issues 100+ calls to kassadin each time
 public class LolUserUpdaterController {
     private static final Logger LOGGER = Logger.getLogger(LolUserUpdaterController.class.getName());
 
     @Autowired
     DaoCollection daoCollection;
+
+    @Autowired
+    KassadinRawDataFetcher rawDataFetcher;
 
     @RequestMapping(value = {"/updateUsers"}, method = RequestMethod.GET, produces = "text/plain")
     @ResponseBody
@@ -48,13 +53,13 @@ public class LolUserUpdaterController {
         naUsers.add(new LolUser("tsm_xpecial", "Xpecial", "na"));
         naUsers.add(new LolUser("tsm_theoddone", "TheOddOne", "na"));
         naUsers.add(new LolUser("tsm_reginald", "Reginald", "na"));
+        naUsers.add(new LolUser("dandinh", "Man Dinh", "na"));
         // C9
         naUsers.add(new LolUser("manballs", "C9 Squirtle", "na"));
         naUsers.add(new LolUser("hail9", "C9 HyperX Diego", "na"));
         naUsers.add(new LolUser("hail9", "C9 Hai", "na"));
         naUsers.add(new LolUser("meteos", "C9 Meteos", "na"));
         naUsers.add(new LolUser("meteos", "C10 Meteos", "na"));
-
         // Vulcun
         naUsers.add(new LolUser("mancloud", "V ilymancloud", "na"));
         naUsers.add(new LolUser("xmithie", "V AleXmithie", "na"));
@@ -73,16 +78,27 @@ public class LolUserUpdaterController {
         naUsers.add(new LolUser("nyjacky", "Crs Bear", "na"));
         naUsers.add(new LolUser("pobelter", "intero", "na"));
         naUsers.add(new LolUser("pobelter", "impobelter", "na"));
+        naUsers.add(new LolUser("zekent", "Zekent Time", "na"));
+        naUsers.add(new LolUser("zekent", "Zékent", "na"));
+        // CST
+        naUsers.add(new LolUser("dontmashme", "dontmashme", "na"));
+        naUsers.add(new LolUser("zionspartan", "ZionSpartan", "na"));
+        naUsers.add(new LolUser("tdnintendudex", "NintendudeX", "na"));
+        naUsers.add(new LolUser("tdnintendudex", "Nintenpai", "na"));
+        naUsers.add(new LolUser("daydreaminyo", "Daydreamin", "na"));
+        naUsers.add(new LolUser("shiphtur", "CST Shiponya", "na"));
+        naUsers.add(new LolUser("jintaee", "atkwave", "na"));
+        naUsers.add(new LolUser("jintaee", "Jintae", "na"));
+        // GGLA
+        naUsers.add(new LolUser("bischulol", "Bıschu", "na"));
+        naUsers.add(new LolUser("quaslol", "gg quas", "na"));
+        naUsers.add(new LolUser("quaslol", "dr quas", "na"));
 
         // misc
         naUsers.add(new LolUser("bestrivenna", "Best Riven NA", "na"));
         naUsers.add(new LolUser("phantoml0rd", "PhantomL0rd", "na"));
         naUsers.add(new LolUser("robertxlee", "ROBERTxGEEGEE", "na"));
-        naUsers.add(new LolUser("zekent", "Zekent Time", "na"));
-        naUsers.add(new LolUser("zekent", "Zékent", "na"));
-        naUsers.add(new LolUser("bischulol", "Bıschu", "na"));
         naUsers.add(new LolUser("chaoxlol", "Chaox", "na"));
-        naUsers.add(new LolUser("shiphtur", "CST Shiponya", "na"));
         naUsers.add(new LolUser("therainman", "The Rain Man", "na"));
         naUsers.add(new LolUser("chu8", "chu8", "na"));
         naUsers.add(new LolUser("chu8", "AlexHori", "na"));
@@ -112,6 +128,9 @@ public class LolUserUpdaterController {
         naUsers.add(new LolUser("mushisgosu", "hi im gosu", "na"));
         naUsers.add(new LolUser("nightblue3", "nightblue3", "na"));
         naUsers.add(new LolUser("itshafu", "Wildfire Zyra", "na"));
+        naUsers.add(new LolUser("sky_mp3", "Śký", "na"));
+        naUsers.add(new LolUser("worstsingedus", "worst smurff us", "na"));
+        naUsers.add(new LolUser("worstsingedus", "worst singed us", "na"));
 
         // euw
         List<LolUser> euwUsers = new ArrayList<LolUser>();
@@ -138,6 +157,8 @@ public class LolUserUpdaterController {
         euwUsers.add(new LolUser("wrecklol", "ES Wreck", "euw"));
         euwUsers.add(new LolUser("edwardlol", "Edward Carry", "euw"));
         euwUsers.add(new LolUser("darkpassagemedia", "DP Naru", "euw"));
+        naUsers.add(new LolUser("holythoth", "DP HolyPhoenix", "euw"));
+        naUsers.add(new LolUser("holythoth", "DP HolyThoth", "euw"));
 
         // br
         List<LolUser> brUsers = new ArrayList<LolUser>();
@@ -161,17 +182,23 @@ public class LolUserUpdaterController {
             for (LolUser lolUser : lolUsers) {
                 Streamer streamer = new Streamer(lolUser.getStreamerName());
                 daoCollection.getStreamerDao().insertStreamer(streamer);
+
+                int summonerId = rawDataFetcher.fetchSummonerId(lolUser.getUsername(), lolUser.getRegion());
+                lolUser.setId(summonerId);
+                daoCollection.getLolUserDao().insertLolUser(lolUser);
             }
         }
 
-        for (LeagueServer leagueServer : usersToAdd.keySet()) {
-            try {
-                MainClient mainClient = new MainClient();
-                mainClient.retrieveUserInfo(leagueServer, usersToAdd.get(leagueServer), daoCollection);
-            } catch (Exception e) {
-                LOGGER.error("error retrieving lolUsers on server: " + leagueServer);
-            }
-        }
+        // TODO delete this once I'm confident I don't need main client to look up user summoner ids
+        // We use 3rd party API instead of this because it can't get ids of some users like xuuura @ br
+        //        for (LeagueServer leagueServer : usersToAdd.keySet()) {
+        //            try {
+        //                MainClient mainClient = new MainClient();
+        //                mainClient.retrieveUserInfo(leagueServer, usersToAdd.get(leagueServer), daoCollection);
+        //            } catch (Exception e) {
+        //                LOGGER.error("error retrieving lolUsers on server: " + leagueServer);
+        //            }
+        //        }
 
         return new ResponseEntity<String>("Updated users. Total users: " + totalUsers, HttpStatus.OK);
     }

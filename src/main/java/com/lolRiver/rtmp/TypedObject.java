@@ -158,9 +158,9 @@ public class TypedObject extends HashMap<String, Object> {
     }
 
     public String toString() {
-        if (type == null)
+        if (type == null) {
             return super.toString();
-        else if (type.equals("flex.messaging.io.ArrayCollection")) {
+        } else if (type.equals("flex.messaging.io.ArrayCollection")) {
             StringBuilder sb = new StringBuilder();
             Object[] data = (Object[])get("array");
             sb.append("ArrayCollection:[");

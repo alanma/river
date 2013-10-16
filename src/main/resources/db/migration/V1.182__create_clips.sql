@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `clips` (
   `id`                          BIGINT(20) NOT NULL AUTO_INCREMENT,
   `video_id`                    BIGINT(20) NOT NULL,
   `game_id`                     BIGINT(20) NOT NULL,
+  `game_type`                   VARCHAR(31),
   `streamer_name`               VARCHAR(127),
   `start_time`                  TIMESTAMP DEFAULT 0,
   `end_time`                    TIMESTAMP DEFAULT 0,

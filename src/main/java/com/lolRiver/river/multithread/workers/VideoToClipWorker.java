@@ -48,7 +48,7 @@ public class VideoToClipWorker extends Worker {
              * return, and allow the request consumer to spin up a new thread with a new thread request
              */
             LOGGER.debug("Could not claim video: " + video.getId() +
-                    ". It has already been claimed.");
+                         ". It has already been claimed.");
             return;
         }
 
@@ -58,12 +58,16 @@ public class VideoToClipWorker extends Worker {
             try {
                 List<Clip> clips = converter.convert(video);
                 if (clips == null || clips.isEmpty()) {
-                    LOGGER.error("converted video to 0 clips: " + video);
+                    // TODO xia look into this problem, because i use min video date for all users,
+                    // but some users started being track at different dates
+                    // LOGGER.error("converted video to 0 clips: " + video);
                     daoCollection.getVideoDao().updateVideoState(video.getId(), State.ERROR);
                 } else {
                     for (Clip clip : clips) {
-                        LOGGER.debug("Trying to insert clip: " + clip);
-                        daoCollection.getClipDao().insertClip(clip);
+                        if (clip.isViewable()) {
+                            LOGGER.debug("Trying to insert clip: " + clip);
+                            daoCollection.getClipDao().insertClip(clip);
+                        }
                     }
                     LOGGER.info("converted video to " + clips.size() + " clips");
                     daoCollection.getVideoDao().updateVideoState(video.getId(), State.FINISHED);

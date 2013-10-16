@@ -34,20 +34,21 @@ public class VideoToClipConverter {
 
         List<Game> matchingGames = daoCollection.getGameDao().getGamesMatchingVideo(video);
         for (Game matchingGame : matchingGames) {
-            Clip clip = new Clip()
-                    .setGameId(matchingGame.getId())
-                    .setVideoId(video.getId())
-                    .setStreamerName(video.getStreamerName())
-                    .setStartTime(matchingGame.getStartTime())
-                    .setEndTime(matchingGame.getEndTime())
-                    .setLength(matchingGame.getLength())
-                    .setViews(video.getViews());
+            Clip clip = new Clip().setGameType(Game.gameTypeFromString(matchingGame.getType()));
+            if (matchingGame.isViewable()) {
+                clip.setGameId(matchingGame.getId())
+                .setVideoId(video.getId())
+                .setStreamerName(video.getStreamerName())
+                .setStartTime(matchingGame.getStartTime())
+                .setEndTime(matchingGame.getEndTime())
+                .setLength(matchingGame.getLength())
+                .setViews(video.getViews());
 
-            String url = clipUrl(video, matchingGame);
-            clip.setUrl(url);
+                String url = clipUrl(video, matchingGame);
+                clip.setUrl(url);
 
-            initGameSpecificInfo(clip, video, matchingGame);
-
+                initGameSpecificInfo(clip, video, matchingGame);
+            }
             clips.add(clip);
         }
         return clips;
@@ -73,15 +74,15 @@ public class VideoToClipConverter {
         Player playerMatchingStreamer = null;
         for (Player player : playerToRoleMap.keySet()) {
             for (LolUser lolUser : lolUsers) {
-                if (lolUser.getUsername().contains(player.getUsername())) {
+                if (lolUser.getId() == player.getId()) {
                     playerMatchingStreamer = player;
                     Role rolePlayed = playerToRoleMap.get(player);
                     clip.setChampionPlayed(player.getChampionPlayed());
                     clip.setRolePlayed(rolePlayed);
 
                     Elo elo = new Elo()
-                            .setUserId(lolUser.getId())
-                            .setTime(game.getStartTime());
+                              .setUserId(lolUser.getId())
+                              .setTime(game.getStartTime());
                     Map<String, String> params = new HashMap<String, String>();
                     params.put(Elo.USER_ID_STRING, "=");
                     params.put(Elo.TIME_STRING, "<");
@@ -93,7 +94,7 @@ public class VideoToClipConverter {
         }
         if (playerMatchingStreamer == null) {
             LOGGER.error(String.format("Couldn't find any of streamer's usernames for game. usernames: %s, game: %s",
-                    lolUsers, game));
+                                      lolUsers, game));
             return;
         }
 
@@ -157,7 +158,7 @@ public class VideoToClipConverter {
             if (player.hasSummonerSpell(SummonerSpell.Name.SMITE)) {
                 matchPlayerWithRole(player, new Role(Role.Name.JUNG), map, availablePlayers, availableRoles);
             } else if (player.hasSummonerSpell(SummonerSpell.Name.EXHAUST)
-                    && !player.getChampionPlayed().cannotPlayRole(new Role(Role.Name.SUPP))) {
+                       && !player.getChampionPlayed().cannotPlayRole(new Role(Role.Name.SUPP))) {
                 matchPlayerWithRole(player, new Role(Role.Name.SUPP), map, availablePlayers, availableRoles);
             }
         }
@@ -184,7 +185,7 @@ public class VideoToClipConverter {
                 champions.add(availablePlayer.getChampionPlayed());
             }
             LOGGER.error("forced to assign random roles videoId: " + video.getId() + "champion set: " + champions +
-                    "roleset:" + availableRoles + " Game: " + game.getAllPlayerDebugString());
+                         "roleset:" + availableRoles + " Game: " + game.getAllPlayerDebugString());
 
             // randomly put roles in
             for (int i = 0; i < availableRoles.size(); i++) {

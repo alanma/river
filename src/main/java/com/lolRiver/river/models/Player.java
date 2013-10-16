@@ -18,6 +18,7 @@ public class Player {
     private static final Logger LOGGER = Logger.getLogger(Player.class.getName());
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private int id;
     private String username;
 
     // game specific fields
@@ -54,8 +55,8 @@ public class Player {
         }
     }
 
-    public static Player playerFromPlayerInfo(String playerInfo) {
-        Player player = new Player();
+    public static Player playerFromPlayerInfo(String playerInfo, String playerId) {
+        Player player = new Player().setId(Integer.valueOf(playerId));
         try {
             Map<String, String> map = mapper.readValue(playerInfo, new TypeReference<Map<String, String>>() {});
             player.setUsername(map.get(USERNAME_STRING));
@@ -105,6 +106,15 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Player setId(int id) {
+        this.id = id;
+        return this;
     }
 
     public String getUsername() {

@@ -11,6 +11,7 @@ all:
     header_api_key_value: YGtB5YwuPfzyswUKfEkRw8qE9fcduFmu
     recent_games_from_region_username_url: https://teemojson.p.mashape.com/player/%s/%s/recent_games
     elo_from_region_username_url: https://teemojson.p.mashape.com/player/%s/%s/leagues
+    summoner_id_from_region_username_url: https://teemojson.p.mashape.com/player/%s/%s
 
   twitch:
     recent_videos_from_streamer_name_url: https://api.twitch.tv/kraken/channels/%s/videos?broadcasts=true
@@ -247,6 +248,12 @@ all:
       jung: 0
       supp: 0
       adc: 1
+    JINX:
+      top: 0
+      mid: 0
+      jung: 0
+      supp: 0
+      adc: 2
     KARMA:
       top: 1
       mid: 2

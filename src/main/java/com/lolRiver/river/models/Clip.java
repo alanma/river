@@ -12,6 +12,7 @@ public class Clip {
     public static final String ID_STRING = "id";
     public static final String GAME_ID_STRING = "game_id";
     public static final String VIDEO_ID_STRING = "video_id";
+    public static final String GAME_TYPE_STRING = "game_type";
     public static final String URL_STRING = "url";
     public static final String STREAMER_NAME_STRING = "streamer_name";
     public static final String START_TIME_STRING = "start_time";
@@ -28,6 +29,7 @@ public class Clip {
     private int id;
     private int gameId;
     private int videoId;
+    private Game.Type gameType;
     private String url;
     private String streamerName;
     private Timestamp startTime;
@@ -55,6 +57,16 @@ public class Clip {
 
     /* END - Non DB variables */
 
+    public boolean isViewable() {
+        switch (gameType) {
+            case RANKED_SOLO_5x5:
+            case RANKED_TEAM_5x5:
+            case NORMAL:
+                return true;
+        }
+        return false;
+    }
+
     public int getId() {
         return id;
     }
@@ -65,6 +77,15 @@ public class Clip {
 
     public int getVideoId() {
         return videoId;
+    }
+
+    public Game.Type getGameType() {
+        return gameType;
+    }
+
+    public Clip setGameType(Game.Type gameType) {
+        this.gameType = gameType;
+        return this;
     }
 
     public String getUrl() {
@@ -268,6 +289,7 @@ public class Clip {
                "id=" + id +
                ", gameId=" + gameId +
                ", videoId=" + videoId +
+               ", gameType=" + gameType +
                ", url='" + url + '\'' +
                ", streamerName='" + streamerName + '\'' +
                ", startTime=" + startTime +
@@ -281,10 +303,13 @@ public class Clip {
                ", enemyLanePartnerChampion=" + enemyLanePartnerChampion +
                ", elo=" + elo +
                ", timeSinceNowMessage='" + timeSinceNowMessage + '\'' +
+               ", generalElo='" + generalElo + '\'' +
+               ", championPlayedString='" + championPlayedString + '\'' +
+               ", championFacedString='" + championFacedString + '\'' +
                ", eloCriteria=" + eloCriteria +
                ", roleCriteria=" + roleCriteria +
-               ", minLength=" + minLength +
-               ", maxLength=" + maxLength +
+               ", minLength='" + minLength + '\'' +
+               ", maxLength='" + maxLength + '\'' +
                '}';
     }
 }
