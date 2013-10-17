@@ -32,12 +32,12 @@ public abstract class WorkerSubmitter implements Runnable {
 
     protected List<WorkerStarter> workerStarters;
 
-    @PostConstruct
+    //@PostConstruct
     public void setup() {
         setup(false);
     }
 
-    @PreDestroy
+    //@PreDestroy
     public void teardown() {
         if (!hasStarted) {
             LOGGER.warn("Trying to stop when it hasn't started");

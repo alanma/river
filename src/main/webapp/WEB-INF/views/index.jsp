@@ -170,7 +170,7 @@
             <td class="searchBox">
                 <div class="ui-widget">
                     <input id="championPlayed" tabindex="2" type="text" name="championPlayedString"
-                           value=${fn:escapeXml(param.championPlayedString)}>
+                           value="${fn:escapeXml(param.championPlayedString)}">
                 </div>
             </td>
         </tr>

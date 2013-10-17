@@ -1,5 +1,8 @@
 package com.lolRiver.river.frontend;
 
+import com.lolRiver.river.models.Champion;
+import com.lolRiver.river.util.AdaptableHttpServletRequest;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -34,6 +37,11 @@ public class Filter implements javax.servlet.Filter {
             chain.doFilter(request, response); // Goes to default servlet.
         } else if (path.equals("/") && params.isEmpty()) {
             request.getRequestDispatcher("/views/?p=1").forward(request, response);
+        } else if (path.equals("/searchClips")) {
+            AdaptableHttpServletRequest adaptableRequest = new AdaptableHttpServletRequest(req);
+            String championName = req.getParameter("championPlayedString");
+            adaptableRequest.setParameter("championPlayedString", Champion.Name.readableName(championName));
+            request.getRequestDispatcher("/views" + path).forward(adaptableRequest, response);
         } else {
             request.getRequestDispatcher("/views" + path).forward(request, response);
         }

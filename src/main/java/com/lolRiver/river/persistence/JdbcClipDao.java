@@ -110,7 +110,7 @@ public class JdbcClipDao implements ClipDao {
                 sb.append(" AND ");
             }
             sb.append(Clip.CHAMPION_PLAYED_STRING + " = " +
-                      StringUtil.addSurroundingQuotes(clip.getChampionPlayedString()));
+                      StringUtil.addSurroundingQuotes(Champion.Name.normalizedName(clip.getChampionPlayedString())));
         }
         if (!StringUtils.isBlank(clip.getChampionFacedString())) {
             if (isFirstCondition) {

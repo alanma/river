@@ -5,6 +5,7 @@ import com.lolRiver.river.models.Champion;
 import com.lolRiver.river.models.Clip;
 import com.lolRiver.river.models.Streamer;
 import com.lolRiver.river.persistence.DaoCollection;
+import com.lolRiver.river.util.AdaptableHttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +64,7 @@ public class HomeController {
         if (championList == null) {
             List<String> list = new ArrayList<String>();
             for (Champion.Name name : Champion.Name.values()) {
-                list.add(WordUtils.capitalizeFully(name.name()));
+                list.add(Champion.Name.readableName(name.name()));
             }
             championList = new ArrayList<String>(list);
         }
@@ -148,6 +150,7 @@ public class HomeController {
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
         modelMap.addAttribute("orderBy", orderBy);
         modelMap.addAttribute("desc", descending);
+
         return "index";
     }
 

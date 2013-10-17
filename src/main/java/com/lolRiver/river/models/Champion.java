@@ -3,6 +3,7 @@ package com.lolRiver.river.models;
 import com.lolRiver.config.ConfigMap;
 import com.lolRiver.river.controllers.deserializers.appconstants.KassadinAppConstants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 import org.apache.log4j.Logger;
 /**
  * @author mxia (mxia@lolRiver.com)
@@ -128,7 +129,63 @@ public class Champion {
         ZED,
         ZIGGS,
         ZILEAN,
-        ZYRA
+        ZYRA;
+
+        public static String readableName(String name) {
+            String upperCaseName = name.toUpperCase();
+            if (upperCaseName.equals(DRMUNDO.name()) || upperCaseName.equals("DR. MUNDO")) {
+                return "Dr. Mundo";
+            } else if (upperCaseName.equals(JARVANIV.name()) || upperCaseName.equals("JARVAN IV")) {
+                return "Jarvan IV";
+            } else if (upperCaseName.equals(LEESIN.name()) || upperCaseName.equals("LEE SIN")) {
+                return "Lee Sin";
+            } else if (upperCaseName.equals(MASTERYI.name()) || upperCaseName.equals("MASTER YI")) {
+                return "Master Yi";
+            } else if (upperCaseName.equals(MISSFORTUNE.name()) || upperCaseName.equals("MISS FORTUNE")) {
+                return "Miss Fortune";
+            } else if (upperCaseName.equals(TWISTEDFATE.name()) || upperCaseName.equals("TWISTED FATE")) {
+                return "Twisted Fate";
+            } else if (upperCaseName.equals(XINZHAO.name()) || upperCaseName.equals("XIN ZHAO")) {
+                return "Xin Zhao";
+            } else if (upperCaseName.equals(CHOGATH.name()) || upperCaseName.equals("CHO'GATH")) {
+                return "Cho'Gath";
+            } else if (upperCaseName.equals(LEBLANC.name()) || upperCaseName.equals("LEBLANC")) {
+                return "LeBlanc";
+            } else if (upperCaseName.equals(KHAZIX.name()) || upperCaseName.equals("KHA'ZIX")) {
+                return "Kha'Zix";
+            } else if (upperCaseName.equals(KOGMAW.name()) || upperCaseName.equals("KOG'MAW")) {
+                return "Kog'Maw";
+            }
+            return WordUtils.capitalizeFully(name);
+        }
+
+        public static String normalizedName(String name) {
+            name = name.toLowerCase();
+            if (name.equals("dr. mundo")) {
+                return DRMUNDO.name();
+            } else if (name.equals("jarvan iv")) {
+                return JARVANIV.name();
+            } else if (name.equals("lee sin")) {
+                return LEESIN.name();
+            } else if (name.equals("master yi")) {
+                return MASTERYI.name();
+            } else if (name.equals("miss fortune")) {
+                return MISSFORTUNE.name();
+            } else if (name.equals("twisted fate")) {
+                return TWISTEDFATE.name();
+            } else if (name.equals("xin zhao")) {
+                return XINZHAO.name();
+            } else if (name.equals("cho'gath")) {
+                return CHOGATH.name();
+            } else if (name.equals("leblanc")) {
+                return LEBLANC.name();
+            } else if (name.equals("kha'zix")) {
+                return KHAZIX.name();
+            } else if (name.equals("kog'maw")) {
+                return KOGMAW.name();
+            }
+            return name;
+        }
     }
 
     private Name name;

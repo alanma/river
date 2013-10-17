@@ -121,6 +121,10 @@ public class LeagueGame implements PlayerList {
                 player.setSummonerSpell1(SummonerSpell.fromId(String.valueOf(to.getInt("spell1Id"))));
                 player.setSummonerSpell2(SummonerSpell.fromId(String.valueOf(to.getInt("spell2Id"))));
 
+                List<String> playerFieldErrors = player.invalidFields();
+                if (!playerFieldErrors.isEmpty()) {
+                    LOGGER.error("Invalid player fields: " + playerFieldErrors + " PLAYER: " + player + " OBJECT: " + o + " OBJECTS: " + obj);
+                }
                 String userId = summonerInternalName;
                 boolean foundUserId = false;
                 for (LeagueSummoner summoner : getAllPlayers()) {

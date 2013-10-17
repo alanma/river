@@ -24,7 +24,7 @@ public class BackgroundWorkerSubmitter extends WorkerSubmitter {
     @Override
     public void init(boolean startNow) {
         workerStarters = new ArrayList<WorkerStarter>();
-        workerStarters.add(videoToClipWorkerStarter);
+        //workerStarters.add(videoToClipWorkerStarter);
 
         super.init(startNow);
     }

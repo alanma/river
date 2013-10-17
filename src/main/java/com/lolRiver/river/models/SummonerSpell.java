@@ -34,7 +34,11 @@ public class SummonerSpell {
     }
 
     public static SummonerSpell fromId(String id) {
-        return new SummonerSpell(KassadinAppConstants.SUMMONER_SPELL_MAPPING.get(id));
+        SummonerSpell summonerSpell = new SummonerSpell(KassadinAppConstants.SUMMONER_SPELL_MAPPING.get(id));
+        if (summonerSpell == null) {
+            LOGGER.error("Got null summoner spell serializing from ID: " + id);
+        }
+        return summonerSpell;
     }
 
     public static SummonerSpell fromString(String spellName) {
