@@ -21,9 +21,13 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/index.css"/>
     <link rel="stylesheet" href="/static/css/jquery/ui-lightness/jquery-ui-1.10.3.custom.css"/>
+    <link rel="stylesheet" href="/static/css/jqpagination.css"/>
+
     <script src="/static/script/util.js"></script>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="/static/script/jgPagination/jquery.jqpagination.min.js"></script>
+    <script src="/static/script/jgPagination/scripts.js"></script>
 
     <script>
         $(function () {
@@ -43,6 +47,7 @@
 </head>
 
 <body>
+
 <a href="/"><img class="logo" src="/static/images/logo.png"></a>
 
 <form method="POST" action="/searchClips">
@@ -440,55 +445,38 @@
 </th>
 <th>Rating</th>
 <th class="paginationHeader">
-    Page<br>
-    <c:set var="prevPage1" value="${param.p - 3}"></c:set>
-    <c:set var="prevPage2" value="${param.p - 2}"></c:set>
-    <c:set var="prevPage3" value="${param.p - 1}"></c:set>
-    <c:set var="nextPage1" value="${param.p + 1}"></c:set>
-    <c:set var="nextPage2" value="${param.p + 2}"></c:set>
-    <c:set var="nextPage3" value="${param.p + 3}"></c:set>
-    <c:if test="${param.p gt 1}">
-        <a href="?p=${param.p - 1}">&lt;</a>
-    </c:if>
+    <div class="pagination">
+        <a href="?p=3" class="first" data-action="first">&laquo;</a>
+        <a href="?p=3" class="previous" data-action="previous">&lsaquo;</a>
+        <input type="text" readonly="readonly" data-max-page="40"/>
+        <a href="?p=3" class="next" data-action="next">&rsaquo;</a>
+        <a href="?p=3" class="last" data-action="last">&raquo;</a>
+    </div>
+    <%--<c:set var="prevPage1" value="${param.p - 3}"></c:set>--%>
+    <%--<c:set var="nextPage1" value="${param.p + 1}"></c:set>--%>
+    <%--<c:if test="${param.p gt 1}">--%>
+    <%--<a href="?p=${param.p - 1}">&lt;</a>--%>
+    <%--</c:if>--%>
 
-    <c:if test="${prevPage1 gt 1}">
-        <a href="?p=1">1</a>
-    </c:if>
+    <%--<c:if test="${prevPage1 gt 1}">--%>
+    <%--<a href="?p=1">1</a>--%>
+    <%--</c:if>--%>
 
-    <c:if test="${prevPage1 gt 2}">
-        ...
-    </c:if>
+    <%--<c:if test="${prevPage1 gt 2}">--%>
+    <%--...--%>
+    <%--</c:if>--%>
 
-    <c:if test="${prevPage1 ge 1}">
-        <a class="page" href="?p=${prevPage1}">${prevPage1}</a>
-    </c:if>
-    <c:if test="${prevPage2 ge 1}">
-        <a class="page" href="?p=${prevPage2}">${prevPage2}</a>
-    </c:if>
-    <c:if test="${prevPage3 ge 1}">
-        <a class="page" href="?p=${prevPage3}">${prevPage3}</a>
-    </c:if>
+    <%--<a class="page" id="curPage" href="?p=${param.p}">${param.p}</a>--%>
 
-    <a class="page" id="curPage" href="?p=${param.p}" class="curentPage">${param.p}</a>
+    <%--<c:if test="${nextPage1 lt numClipPages}">--%>
+    <%--...--%>
+    <%--<a class="page" href="?p=${numClipPages}">${numClipPages}</a>--%>
+    <%--</c:if>--%>
 
-    <c:if test="${nextPage1 le numClipPages}">
-        <a class="page" href="?p=${nextPage1}">${nextPage1}</a>
-    </c:if>
-    <c:if test="${nextPage2 le numClipPages}">
-        <a class="page" href="?p=${nextPage2}">${nextPage2}</a>
-    </c:if>
-    <c:if test="${nextPage3 le numClipPages}">
-        <a class="page" href="?p=${nextPage3}">${nextPage3}</a>
-    </c:if>
-
-    <c:if test="${nextPage3 lt numClipPages}">
-        ...
-        <a class="page" href="?p=${numClipPages}">${numClipPages}</a>
-    </c:if>
-
-    <c:if test="${param.p lt numClipPages}">
-        <a href="?p=${param.p + 1}">&gt;</a>
-    </c:if></th>
+    <%--<c:if test="${param.p lt numClipPages}">--%>
+    <%--<a href="?p=${param.p + 1}">&gt;</a>--%>
+    <%--</c:if></th>--%>
+</th>
 </tr>
 
 <c:forEach items="${clips}" var="clip" varStatus="status">

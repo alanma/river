@@ -132,6 +132,9 @@ public class Champion {
         ZYRA;
 
         public static String readableName(String name) {
+            if (name == null) {
+                return null;
+            }
             String upperCaseName = name.toUpperCase();
             if (upperCaseName.equals(DRMUNDO.name()) || upperCaseName.equals("DR. MUNDO")) {
                 return "Dr. Mundo";
@@ -160,6 +163,9 @@ public class Champion {
         }
 
         public static String normalizedName(String name) {
+            if (name == null) {
+                return null;
+            }
             name = name.toLowerCase();
             if (name.equals("dr. mundo")) {
                 return DRMUNDO.name();
