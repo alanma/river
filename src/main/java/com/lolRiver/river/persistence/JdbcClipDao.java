@@ -67,6 +67,13 @@ public class JdbcClipDao implements ClipDao {
     }
 
     @Override
+    public int getNumTotalClips(String orderBy, boolean descending, Clip clip) {
+        String query = constructSelectQueryFromClip(null, null, orderBy, descending, clip);
+        query = query.replace("*", "count(*)");
+        return jdbcTemplate.queryForInt(query);
+    }
+
+    @Override
     public Clip getClipFromId(int id) {
         final Clip queryObject = new Clip();
         queryObject.setId(id);
@@ -88,8 +95,8 @@ public class JdbcClipDao implements ClipDao {
         return jdbcTemplate.query(query, rowMapper);
     }
 
-    @Override
-    public List<Clip> getClipsFromClip(int offset, int size, String orderBy, boolean descending, Clip clip) {
+    private String constructSelectQueryFromClip(Integer offset, Integer size, String orderBy, boolean descending,
+                                                Clip clip) {
         String query = GET_CLIPS_HEAD_SQL;
 
         StringBuilder sb = new StringBuilder(" WHERE ");
@@ -164,11 +171,20 @@ public class JdbcClipDao implements ClipDao {
         query += conditionQuery;
 
         if (descending) {
-            query += String.format(" ORDER BY %s DESC LIMIT %d, %d", orderBy, offset, size);
+            query += String.format(" ORDER BY %s DESC", orderBy);
         } else {
-            query += String.format(" ORDER BY %s ASC LIMIT %d, %d", orderBy, offset, size);
+            query += String.format(" ORDER BY %s ASC", orderBy);
         }
 
+        if (offset != null && size != null) {
+            query += String.format(" LIMIT %d, %d", offset, size);
+        }
+        return query;
+    }
+
+    @Override
+    public List<Clip> getClipsFromClip(int offset, int size, String orderBy, boolean descending, Clip clip) {
+        String query = constructSelectQueryFromClip(offset, size, orderBy, descending, clip);
         LOGGER.debug("QUERYING CLIPS FROM FRONT-END QUERY: " + query);
         return jdbcTemplate.query(query, rowMapper);
     }

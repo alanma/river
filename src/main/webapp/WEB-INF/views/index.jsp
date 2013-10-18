@@ -27,7 +27,6 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="/static/script/jgPagination/jquery.jqpagination.min.js"></script>
-    <script src="/static/script/jgPagination/scripts.js"></script>
 
     <script>
         $(function () {
@@ -41,6 +40,26 @@
 
             $("#championFaced").autocomplete({
                 source: '${pageContext.request.contextPath}/autocompleteChampionList',
+            });
+        });
+
+        $(document).ready(function () {
+            $('.pagination').jqPagination({
+                link_string: '/searchClips?p=',
+                max_page: '${numClipPages}',
+                paged: function (page) {
+                    var map = {};
+                    map['streamerName'] = '${fn:escapeXml(param.streamerName)}';
+                    map['championPlayedString'] = '${fn:escapeXml(param.championPlayedString)}';
+                    map['championFacedString'] = '${fn:escapeXml(param.championFacedString)}';
+                    map['minLength'] = '${fn:escapeXml(param.minLength)}';
+                    map['maxLength'] = '${fn:escapeXml(param.maxLength)}';
+                    map['roleCriteria'] = '${roleCriteria}';
+                    map['eloCriteria'] = '${eloCriteria}';
+                    map['orderBy'] = '${orderBy}';
+                    map['desc'] = '${desc}';
+                    post_to_url(this.link_string + page, map);
+                }
             });
         });
     </script>
@@ -311,7 +330,7 @@
                value="role_played" src="${roleImage}">
     </form>
 </th>
-<th colspan="2">Matchup
+<th colspan="2"> Matchup
     <form method="POST" action="/searchClips">
         <input type="hidden" name="streamerName" value=${fn:escapeXml(param.streamerName)}>
         <input type="hidden" name="championPlayedString" value=${fn:escapeXml(param.championPlayedString)}>
@@ -446,36 +465,12 @@
 <th>Rating</th>
 <th class="paginationHeader">
     <div class="pagination">
-        <a href="?p=3" class="first" data-action="first">&laquo;</a>
-        <a href="?p=3" class="previous" data-action="previous">&lsaquo;</a>
-        <input type="text" readonly="readonly" data-max-page="40"/>
-        <a href="?p=3" class="next" data-action="next">&rsaquo;</a>
-        <a href="?p=3" class="last" data-action="last">&raquo;</a>
+        <a class="first" data-action="first">&laquo;</a>
+        <a class="previous" data-action="previous">&lsaquo;</a>
+        <input type="text" readonly="readonly" data-current-page="${param.p}" data-max-page="${numClipsPage}"/>
+        <a class="next" data-action="next">&rsaquo;</a>
+        <a class="last" data-action="last">&raquo;</a>
     </div>
-    <%--<c:set var="prevPage1" value="${param.p - 3}"></c:set>--%>
-    <%--<c:set var="nextPage1" value="${param.p + 1}"></c:set>--%>
-    <%--<c:if test="${param.p gt 1}">--%>
-    <%--<a href="?p=${param.p - 1}">&lt;</a>--%>
-    <%--</c:if>--%>
-
-    <%--<c:if test="${prevPage1 gt 1}">--%>
-    <%--<a href="?p=1">1</a>--%>
-    <%--</c:if>--%>
-
-    <%--<c:if test="${prevPage1 gt 2}">--%>
-    <%--...--%>
-    <%--</c:if>--%>
-
-    <%--<a class="page" id="curPage" href="?p=${param.p}">${param.p}</a>--%>
-
-    <%--<c:if test="${nextPage1 lt numClipPages}">--%>
-    <%--...--%>
-    <%--<a class="page" href="?p=${numClipPages}">${numClipPages}</a>--%>
-    <%--</c:if>--%>
-
-    <%--<c:if test="${param.p lt numClipPages}">--%>
-    <%--<a href="?p=${param.p + 1}">&gt;</a>--%>
-    <%--</c:if></th>--%>
 </th>
 </tr>
 

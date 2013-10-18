@@ -13,6 +13,9 @@ public interface ClipDao {
     // returns number of clips in db
     public int getNumTotalClips();
 
+    // returns number of clips in db
+    public int getNumTotalClips(String orderBy, boolean descending, Clip clip);
+
     // get the Clip with given id
     public Clip getClipFromId(final int id);
 

@@ -11,7 +11,6 @@ frontend
 Features
     Frontend
         - put margin at bottom of clips table, put navigation bar w/ faq, contact, info
-        - convert champion name enum to reader friendly version
         - Dates:
             - make dates show X min ago, X days ago like lolking
                 - fuzzy time, jquery/javascript, if it works, remove the java code I wrote to try and do this...
@@ -20,12 +19,12 @@ Features
         - Steamer avatars
         - Streamer popup with info?
         - Watch Video needs to go to game page
-        - page numbers should never move, so it's easy to scroll through pages over and over
         - clicking on random skin takes you to that random game
         - focus checkboxes when you press tab in search table
 
     Backend
         - support other game types like 3v3, aram, if people are interested
+        - purge clips when videos get taken off twitch for some reason
 
 Bugs
     - zooming in and out of browser (ctrl scroll or ctrl +) messes up page

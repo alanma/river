@@ -5,12 +5,16 @@ import com.google.common.base.CaseFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 /**
  * @author mxia (mxia@lolRiver.com)
  *         10/1/13
  */
 
 public class SqlQueryUtil {
+    private static final Logger LOGGER = Logger.getLogger(SqlQueryUtil.class);
+
     /**
      * @param paramsToMatch param name for key, conditional operator string for value (<, >, =)
      * @return sql conditional string you can insert into any sql clause ending with "WHERE". The caller must use namedJdbcTemplate.
@@ -48,7 +52,17 @@ public class SqlQueryUtil {
     public static String inClause(List<String> list, boolean encloseWithDoubleQuotes) {
         if (encloseWithDoubleQuotes) {
             for (int i = 0; i < list.size(); i++) {
-                String s = "\"" + list.get(i) + "\"";
+                String s = list.get(i);
+                if (s.length() > 2) {
+                    if (s.charAt(0) != '"') {
+                        s = '"' + s;
+                    }
+                    if (s.charAt(s.length() - 1) != '"') {
+                        s = s + '"';
+                    }
+                } else {
+                    throw new IllegalArgumentException("Tried to construct SQL in clause using string: " + s);
+                }
                 list.set(i, s);
             }
         }

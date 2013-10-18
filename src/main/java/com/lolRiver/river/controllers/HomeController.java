@@ -5,7 +5,6 @@ import com.lolRiver.river.models.Champion;
 import com.lolRiver.river.models.Clip;
 import com.lolRiver.river.models.Streamer;
 import com.lolRiver.river.persistence.DaoCollection;
-import com.lolRiver.river.util.AdaptableHttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +37,10 @@ public class HomeController {
             File folder = new File("src/main/webapp/static/images/skins");
             if (folder.exists()) {
                 for (File fileEntry : folder.listFiles()) {
+                    if (fileEntry.isHidden()) {
+                        System.out.println("file didn't go through!: " + fileEntry.getAbsolutePath());
+                        continue;
+                    }
                     String filePath = fileEntry.getAbsolutePath();
                     list.add(filePath.substring(filePath.indexOf("/static")));
                 }
@@ -108,7 +110,7 @@ public class HomeController {
                                                               "start_time", true);
         modelMap.addAttribute("clips", clips);
 
-        int numClipPages = 45;//1 + daoCollection.getClipDao().getNumTotalClips() / Constants.MAX_CLIPS_PER_TABLE;
+        int numClipPages = 1 + daoCollection.getClipDao().getNumTotalClips() / Constants.MAX_CLIPS_PER_TABLE;
         modelMap.addAttribute("numClipPages", numClipPages);
 
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
@@ -117,10 +119,7 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value = {"/searchClips"}, method = RequestMethod.POST)
-    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip,
-                              @RequestParam(value = "orderBy") String orderBy,
-                              @RequestParam(value = "desc") boolean descending) {
+    private void convertFrontEndQuirks(Clip clip) {
         // front-end sends length in minutes, so convert to seconds
         if (!StringUtils.isBlank(clip.getMinLength())) {
             clip.setMinLength(String.valueOf(Integer.valueOf(clip.getMinLength()) * 60));
@@ -129,22 +128,56 @@ public class HomeController {
             clip.setMaxLength(String.valueOf(Integer.valueOf(clip.getMaxLength()) * 60));
         }
 
-        List<Clip> clips = daoCollection.getClipDao().getClipsFromClip(0, Constants.MAX_CLIPS_PER_TABLE, orderBy,
+        // front-end sends arrays with [ ] sometimes
+        List<String> roleCriteria = clip.getRoleCriteria();
+        if (roleCriteria != null && !roleCriteria.isEmpty()) {
+            for (int i = 0; i < roleCriteria.size(); i++) {
+                String role = roleCriteria.get(i);
+                role = role.replace("[", "");
+                role = role.replace("]", "");
+                roleCriteria.set(i, role);
+            }
+            clip.setRoleCriteria(roleCriteria);
+        }
+
+        List<String> eloCriteria = clip.getEloCriteria();
+        if (eloCriteria != null && !eloCriteria.isEmpty()) {
+            for (int i = 0; i < eloCriteria.size(); i++) {
+                String role = eloCriteria.get(i);
+                role = role.replace("[", "");
+                role = role.replace("]", "");
+                eloCriteria.set(i, role);
+            }
+            clip.setEloCriteria(eloCriteria);
+        }
+    }
+
+    @RequestMapping(value = {"/searchClips"}, method = RequestMethod.POST)
+    public String searchClips(ModelMap modelMap, @ModelAttribute Clip clip,
+                              @RequestParam(value = "orderBy") String orderBy,
+                              @RequestParam(value = "desc") boolean descending,
+                              @RequestParam(value = "p", defaultValue = "1") int offset) {
+        convertFrontEndQuirks(clip);
+
+        List<Clip> clips = daoCollection.getClipDao().getClipsFromClip((offset - 1) * Constants.MAX_CLIPS_PER_TABLE,
+                                                                      Constants.MAX_CLIPS_PER_TABLE, orderBy,
                                                                       descending, clip);
         modelMap.addAttribute("clips", clips);
 
+        int numClipPages = 1 + daoCollection.getClipDao().getNumTotalClips(orderBy, descending, clip) / Constants.MAX_CLIPS_PER_TABLE;
+        modelMap.addAttribute("numClipPages", numClipPages);
+
         // pass back in the posted checkboxes to leave them checked
         if (clip != null) {
-            List<String> roleCriteria = new ArrayList<String>();
-            List<String> eloCriteria = new ArrayList<String>();
-            if (clip.getRoleCriteria() != null) {
-                roleCriteria = clip.getRoleCriteria();
+            List<String> roleCriteria = clip.getRoleCriteria();
+            if (roleCriteria != null && !roleCriteria.isEmpty()) {
+                modelMap.addAttribute("roleCriteria", roleCriteria);
             }
-            if (clip.getEloCriteria() != null) {
-                eloCriteria = clip.getEloCriteria();
+
+            List<String> eloCriteria = clip.getEloCriteria();
+            if (eloCriteria != null && !eloCriteria.isEmpty()) {
+                modelMap.addAttribute("eloCriteria", eloCriteria);
             }
-            modelMap.addAttribute("roleCriteria", new ArrayList<String>(roleCriteria));
-            modelMap.addAttribute("eloCriteria", new ArrayList<String>(eloCriteria));
         }
 
         modelMap.addAttribute("randomSkinFile", getRandomSkinFile());
