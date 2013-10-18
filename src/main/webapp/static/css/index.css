@@ -184,7 +184,7 @@ input {
 }
 
 input.searchButton {
-    padding-top: 22px;
+    padding-top: 0px;
     vertical-align: text-top;
     width: 85px;
     height: 85px;
