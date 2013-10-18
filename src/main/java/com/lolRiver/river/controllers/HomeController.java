@@ -38,7 +38,6 @@ public class HomeController {
             if (folder.exists()) {
                 for (File fileEntry : folder.listFiles()) {
                     if (fileEntry.isHidden()) {
-                        System.out.println("file didn't go through!: " + fileEntry.getAbsolutePath());
                         continue;
                     }
                     String filePath = fileEntry.getAbsolutePath();
