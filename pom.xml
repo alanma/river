@@ -9,6 +9,8 @@
     <name>Lol River</name>
 
     <properties>
+        <test-assembly-dir>${project.build.directory}/river</test-assembly-dir>
+
         <!-- Git repository -->
         <skeletor.git_repo>github:opqpop/river.git</skeletor.git_repo>
 
@@ -74,6 +76,50 @@
         </resources>
 
         <plugins>
+            <!-- make jetty work with aws beanstalk http://www.eclipse.org/jetty/documentation/current/elastic-beanstalk.html#elastic-beanstalk-overview -->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-test-webapp</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.eclipse.jetty.beanstalk</groupId>
+                                    <artifactId>jetty-beanstalk-overlay</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${test-assembly-dir}/</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>gnu</tarLongFileMode>
+                    <descriptors>
+                        <descriptor>src/assemble/beanstalk-testapp.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Populates the ${buildNumber} variable with the most recent git commit tag (or sha if no tag exists) -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
